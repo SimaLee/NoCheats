@@ -1,2 +1,2 @@
-# Look what can we do in just 20 days !!
+# Aha You look so cooooooool!
 ##  That'll really make a difference!!
