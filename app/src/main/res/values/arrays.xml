@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="gender">
+        <item>男</item>
+        <item>女</item>
+        <item>未知</item>
+    </string-array>
+
+    <string-array name="post_type">
+        <item>金融骗术</item>
+        <item>电信骗术</item>
+        <item>网络骗术</item>
+        <item>街头骗术</item>
+        <item>其他骗术</item>
+    </string-array>
+
+</resources>

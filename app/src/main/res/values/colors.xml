@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#fd8ab1</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="background">#e0e4e4</color>
+
+    <color name="colorGreen">#8df9a6</color>
+
+    <color name="colorToolBar">#535353</color>
+
+    <color name="colorLine">#EEEEEE</color>
+
+    <color name="colorBaiduBg">#F3F3F3</color>
+    <color name="colorBdiduText">#4C4C4C</color>
+
+    <color name="colorHint">#999999</color>
+
+    <color name="colorCheatType">#f7210d</color>
+</resources>
