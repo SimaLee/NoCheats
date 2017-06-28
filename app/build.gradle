@@ -28,6 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.lcodecorex:tkrefreshlayout:1.0.7'
     compile 'com.github.arcadefire:nice-spinner:1.2'
