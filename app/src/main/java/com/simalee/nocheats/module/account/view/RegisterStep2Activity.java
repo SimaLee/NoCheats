@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
+import com.simalee.nocheats.common.base.Response;
+import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.account.contract.RegisterContract;
 import com.simalee.nocheats.module.account.presenter.RegisterPresenter;
 
@@ -34,11 +36,13 @@ public class RegisterStep2Activity extends BaseActivity implements RegisterContr
     private RegisterContract.Presenter mRegisterPresenter;
 
     String nickName;
-
+    String userId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_step_2);
+        userId = getIntent().getStringExtra("id");
+        LogUtils.d(TAG,"userId is :"+userId);
         initViews();
 
         mRegisterPresenter = new RegisterPresenter(this);
@@ -82,7 +86,7 @@ public class RegisterStep2Activity extends BaseActivity implements RegisterContr
             public void onClick(View v) {
                 if (mRegisterPresenter != null){
                     String nickName = text_nickName.getText().toString();
-                    mRegisterPresenter.setNickName("123",nickName);
+                    mRegisterPresenter.setNickName(userId,nickName);
                 }
 
             }
@@ -90,7 +94,7 @@ public class RegisterStep2Activity extends BaseActivity implements RegisterContr
     }
 
     @Override
-    public void showRegisterFailed(String reason) {
+    public void showRegisterFailed(Response reason) {
         //do nothing
     }
 
@@ -105,7 +109,8 @@ public class RegisterStep2Activity extends BaseActivity implements RegisterContr
     }
 
     @Override
-    public void toNextStep() {
+    public void toNextStep(String id) {
+        //此处id无用 为了区分 传递id值为"nothing";
         Intent intent = new Intent(RegisterStep2Activity.this,RegisterStep3Activity.class);
         startActivity(intent);
     }

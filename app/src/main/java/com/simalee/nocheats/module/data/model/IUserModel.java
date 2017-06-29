@@ -2,6 +2,7 @@ package com.simalee.nocheats.module.data.model;
 
 import android.graphics.Bitmap;
 
+import com.simalee.nocheats.common.base.Response;
 import com.simalee.nocheats.module.data.entity.user.UserInfo;
 
 /**
@@ -17,8 +18,8 @@ public interface IUserModel {
     }
 
     interface RegisterCallback{
-        void onRegisterSuccess();
-        void onRegisterFailed(String reason);
+        void onRegisterSuccess(String id);
+        void onRegisterFailed(Response reason);
     }
 
 

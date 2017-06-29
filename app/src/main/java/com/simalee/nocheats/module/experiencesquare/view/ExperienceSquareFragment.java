@@ -122,7 +122,7 @@ public class ExperienceSquareFragment extends BaseFragment implements OnFabClick
 
     }
 
-    class PageAdapter extends FragmentStatePagerAdapter {
+    class PageAdapter extends FragmentPagerAdapter {
         List<String> mTitles ;
         List<Fragment> mFragments;
 

@@ -3,6 +3,7 @@ package com.simalee.nocheats.module.account.presenter;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
+import com.simalee.nocheats.common.base.Response;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.account.contract.RegisterContract;
 import com.simalee.nocheats.module.data.model.IUserModel;
@@ -33,12 +34,12 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         //TODO 访问Model层数据
         userModel.register(account, passwd, code, new IUserModel.RegisterCallback() {
             @Override
-            public void onRegisterSuccess() {
-                mRegisterView.toNextStep();
+            public void onRegisterSuccess(String id) {
+                mRegisterView.toNextStep(id);
             }
 
             @Override
-            public void onRegisterFailed(String reason) {
+            public void onRegisterFailed(Response reason) {
                 mRegisterView.showRegisterFailed(reason);
             }
         });
@@ -51,7 +52,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         userModel.setNickName(id, nickName, new IUserModel.ChangeNickNameCallback() {
             @Override
             public void onChangeSuccess() {
-                mRegisterView.toNextStep();
+                mRegisterView.toNextStep("nothing");
             }
 
             @Override
@@ -61,7 +62,7 @@ public class RegisterPresenter implements RegisterContract.Presenter {
 
             @Override
             public void onNickNameExist() {
-
+                mRegisterView.showCheckNameError("该昵称已被使用！");
             }
         });
         //TODO 访问Model层数据
@@ -73,12 +74,12 @@ public class RegisterPresenter implements RegisterContract.Presenter {
         userModel.checkNickName(nickName, new IUserModel.ChangeNickNameCallback() {
             @Override
             public void onChangeSuccess() {
-
+                //do nothing
             }
 
             @Override
             public void onChangFailure(String reason) {
-
+                //do nothing
             }
 
             @Override

@@ -70,18 +70,6 @@ public class PreviousPostActivity extends BaseActivity {
         mRecyclerView.setAdapter(mPostAdapter);
         mRecyclerView.setAdapter(mPostAdapter);
 
-        /*mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mRefreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRefreshLayout.setRefreshing(false);
-                        LogUtils.d(TAG,"下拉加载");
-                    }
-                },2000);
-            }
-        });*/
         setupRefreshLayout();
 
         tv_back.setOnClickListener(new View.OnClickListener() {

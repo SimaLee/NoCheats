@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.simalee.nocheats.common.base.BasePresenter;
 import com.simalee.nocheats.common.base.BaseView;
+import com.simalee.nocheats.common.base.Response;
 
 /**
  * Created by Lee Sima on 2017/6/23.
@@ -15,13 +16,13 @@ public interface RegisterContract {
 
     interface View extends BaseView<Presenter>{
 
-        void showRegisterFailed(String reason);
+        void showRegisterFailed(Response reason);
 
         void showCheckNameError(String reason);
 
         void showNickNameUpdateFailure(String reason);
 
-        void toNextStep();
+        void toNextStep(String id);
 
         void showPCode(Bitmap bitmap);
 

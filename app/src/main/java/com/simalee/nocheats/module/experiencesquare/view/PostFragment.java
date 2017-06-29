@@ -59,6 +59,7 @@ public class PostFragment extends BaseFragment implements PostsContract.View{
     private TwinklingRefreshLayout mRefreshLayout;
     private PostAdapter mPostAdapter;
 
+    private  boolean shouldResume = true;
 
     private PostsContract.Presenter mPresenter;
 
@@ -117,8 +118,13 @@ public class PostFragment extends BaseFragment implements PostsContract.View{
     @Override
     public void onResume() {
         super.onResume();
+
         LogUtils.d(TAG,"onResume invoked");
-        mPresenter.start();
+        if (shouldResume){
+            mPresenter.start();
+            shouldResume = false;
+        }
+
     }
 
     @Override
