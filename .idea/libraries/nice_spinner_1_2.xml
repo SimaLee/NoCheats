@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="nice-spinner-1.2">
     <CLASSES>
-      <root url="file://$USER_HOME$/.android/build-cache/a0422dcf75229b0cac221a5352e835da26e37edd/output/res" />
-      <root url="jar://$USER_HOME$/.android/build-cache/a0422dcf75229b0cac221a5352e835da26e37edd/output/jars/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.arcadefire/nice-spinner/1.2/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.github.arcadefire/nice-spinner/1.2/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
