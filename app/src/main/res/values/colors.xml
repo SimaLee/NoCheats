@@ -19,4 +19,9 @@
     <color name="colorHint">#999999</color>
 
     <color name="colorCheatType">#f7210d</color>
+
+
+
+    -------------------------------------------------------
+    <color name="colorLogout">#c6f73636</color>
 </resources>

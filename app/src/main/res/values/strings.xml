@@ -17,4 +17,7 @@
 
     <string name="text_register_tips">注意:确定昵称之后就不能修改了哦</string>
     <string name="text_register_congratulation">恭喜你\n 注册成功!</string>
+
+    //------------------------------------------------
+    <string name="user_name">no cheats</string>
 </resources>

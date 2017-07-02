@@ -70,6 +70,7 @@
         android:layout_marginRight="20dp"
         android:layout_width="110dp"
         android:layout_height="40dp"
+        android:scaleType="fitXY"
         android:background="@drawable/bg_label_green"/>
 
     <android.support.design.widget.TextInputLayout

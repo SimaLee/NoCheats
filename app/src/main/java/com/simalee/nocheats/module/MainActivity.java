@@ -1,10 +1,12 @@
 package com.simalee.nocheats.module;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,33 +16,50 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.base.BaseFragment;
 import com.simalee.nocheats.common.base.OnFabClickListener;
+import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.LogUtils;
+import com.simalee.nocheats.common.util.PreferenceUtil;
+import com.simalee.nocheats.common.view.CircleImageView;
+import com.simalee.nocheats.module.account.view.AccountManagement.EditPersonalInfoEvent;
 import com.simalee.nocheats.module.account.view.AccountManagementActivity;
 import com.simalee.nocheats.module.account.view.PreviousPostActivity;
 import com.simalee.nocheats.module.account.view.PreviousTopicActivity;
 import com.simalee.nocheats.module.assistant.AssistantActivity;
 import com.simalee.nocheats.module.experiencesquare.view.ExperienceSquareFragment;
 import com.simalee.nocheats.module.topicsquare.view.TopicSquareFragment;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.StringCallback;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.Call;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-
-
     private static final String TAG = MainActivity.class.getSimpleName();
+    private final int CHANGE_HEAD = 1;
+    private final int CHANGE_NAME = 2;
 
     private DrawerLayout drawer;
     private FloatingActionButton fab;
     private NavigationView navigationView;
     Toolbar mToolbar;
+    private CircleImageView cv_user_head;
+    private TextView tv_user_name;
 
-    private RelativeLayout rl_user;
+    private View rl_user;
 
     /**
      * 用于记录当前是哪个fragment 响应fab的操作
@@ -55,7 +74,9 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        EventBus.getDefault().register(this);
         initViews();
+        getUserMsg();
     }
 
 
@@ -88,7 +109,7 @@ public class MainActivity extends BaseActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        rl_user = (RelativeLayout) navigationView.getHeaderView(0);
+        rl_user =  navigationView.getHeaderView(0);
         rl_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +118,9 @@ public class MainActivity extends BaseActivity
                 startActivity(intent);
             }
         });
+        cv_user_head = (CircleImageView)rl_user.findViewById(R.id.image_user);
+        tv_user_name = (TextView)rl_user.findViewById(R.id.tv_user_name);
+
         FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
         ExperienceSquareFragment fragment = ExperienceSquareFragment.newInstance();
         currentFragment = fragment;
@@ -104,6 +128,53 @@ public class MainActivity extends BaseActivity
         mTransaction.commit();
     }
 
+    private void getUserMsg(){
+        String u_id = PreferenceUtil.getString(MainActivity.this,PreferenceUtil.USER_ID);
+        LogUtils.d(TAG,u_id);
+        if(!u_id.equals("")) {
+            OkHttpUtils.post()
+                    .url(Constant.Url.URL_GET_USER_INFORMATION)
+                    .addParams("u_id",u_id)
+                    .build()
+                    .execute(new StringCallback() {
+                        @Override
+                        public void onError(Call call, Exception e, int id) {
+                            LogUtils.e(TAG, "couldn't not get user info:" + e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(String response, int id) {
+                            LogUtils.d(TAG, "user_info: " + response);
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                String msg = jsonObject.getString("msg");
+                                String userInf = jsonObject.getString("userInf");
+                                LogUtils.d(TAG,userInf);
+                                if(msg.equals("1")){
+                                    if(userInf.equals("null")){
+                                        cv_user_head.setImageResource(R.mipmap.testimage);
+                                        tv_user_name.setText(Constant.UserInfo.USER_NAME);
+                                    }else{
+                                        JSONObject jsonObject1 = new JSONObject(userInf);
+                                        String user_name = jsonObject1.getString("u_name");
+                                        String user_head_url = jsonObject1.getString("head_logo");
+                                        tv_user_name.setText(user_name);
+                                        Glide.with(MainActivity.this)
+                                                .load(Constant.Url.BASE_URL + user_head_url)
+                                                .asBitmap()
+                                                .into(cv_user_head);
+                                    }
+                                }else{
+                                    LogUtils.d(TAG,"获取个人信息失败");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+        }
+    }
     @Override
     public void onBackPressed() {
 
@@ -196,5 +267,21 @@ public class MainActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void changeInfo(EditPersonalInfoEvent event){
+        int type =event.getType();
+        String msg = event.getMsg();
+        switch (type){
+            case CHANGE_HEAD:
+                break;
+            case CHANGE_NAME:
+                tv_user_name.setText(msg);
+                break;
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 }
