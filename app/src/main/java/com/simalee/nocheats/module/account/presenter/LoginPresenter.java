@@ -34,8 +34,8 @@ public class LoginPresenter implements LoginContract.Presenter {
             }
 
             @Override
-            public void onLoginSuccess() {
-                mLoginView.onLoginSuccess();
+            public void onLoginSuccess(String user_id) {
+                mLoginView.onLoginSuccess(user_id);
             }
 
             @Override

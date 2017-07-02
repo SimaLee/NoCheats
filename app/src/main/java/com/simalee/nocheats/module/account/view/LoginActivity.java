@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
+import com.simalee.nocheats.common.util.PreferenceUtil;
 import com.simalee.nocheats.module.MainActivity;
 import com.simalee.nocheats.module.account.contract.LoginContract;
 import com.simalee.nocheats.module.account.presenter.LoginPresenter;
@@ -44,8 +45,17 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mLoginPresenter = new LoginPresenter(this);
+        isLogin();
         initOkhttp();
         initViews();
+    }
+    private void isLogin(){
+        String is_login = PreferenceUtil.getString(LoginActivity.this,PreferenceUtil.IS_LOGIN);
+        if(is_login.equals("1")){
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
     private void initOkhttp(){
         //配置OkHttp
@@ -108,7 +118,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     }
 
     @Override
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String userId) {
+        PreferenceUtil.setString(LoginActivity.this,PreferenceUtil.USER_ID,userId);
+        PreferenceUtil.setString(LoginActivity.this,PreferenceUtil.IS_LOGIN,"1");
+        PreferenceUtil.setString(LoginActivity.this,PreferenceUtil.PHONE,text_user.getText().toString().trim());
         Intent intent = new Intent(LoginActivity.this,MainActivity.class);
         startActivity(intent);
         finish();

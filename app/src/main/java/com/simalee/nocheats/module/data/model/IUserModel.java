@@ -13,7 +13,7 @@ public interface IUserModel {
 
     interface LoginCallback{
         void onError(Exception e);
-        void onLoginSuccess();
+        void onLoginSuccess(String user_id);
         void onLoginFailure(String reason);
     }
 

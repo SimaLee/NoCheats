@@ -14,7 +14,7 @@ public interface LoginContract {
         void clearUserName();
         void clearPassword();
 
-        void onLoginSuccess();
+        void onLoginSuccess(String user_id);
         void onLoginFailed(String reason);
 
         void toRegister();

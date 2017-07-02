@@ -13,11 +13,11 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.simalee.nocheats.common.view.CircleImageView
         android:id="@+id/image_user"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/ic_android_black_36dp"
+        android:src="@mipmap/testimage"
         android:layout_centerHorizontal="true"
         app:civ_border_width="2dp"
         app:civ_border_color="#FF000000"/>
@@ -30,8 +30,8 @@
         android:layout_below="@id/image_user"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        android:text="德玛西亚"
         android:textSize="14sp"
+        android:text="@string/user_name"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

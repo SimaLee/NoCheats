@@ -59,11 +59,11 @@ public class UserModel implements IUserModel{
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String msg = jsonObject.getString("msg");
-                            String uesrId = jsonObject.getString("id");
+                            String userId = jsonObject.getString("id");
 
                             if ("0".equals(msg)){
                                 //TODO 保存用户信息 用于登录后操作
-                                callback.onLoginSuccess();
+                                callback.onLoginSuccess(userId);
                             }else if ("1".equals(msg)){
                                 callback.onLoginFailure("密码错误");
                             }else if ("2".equals(msg)){
