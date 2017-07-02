@@ -89,7 +89,11 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
            }
        });
 
-
+        // 便于测试
+        String account = "12345678901";
+        text_user.setText(account);
+        text_user.setSelection(account.length());
+        text_password.setText("123456");
 
     }
 

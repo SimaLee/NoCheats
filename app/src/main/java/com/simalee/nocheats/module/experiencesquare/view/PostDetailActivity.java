@@ -1,6 +1,7 @@
 package com.simalee.nocheats.module.experiencesquare.view;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,6 +9,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +42,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
 
     private PostDetailAdapter mPostDetailAdapter;
 
+
+    private RelativeLayout rl_comment;
+    private EditText et_comment;
+    private ImageView ib_send;
+
     TextView tv_back;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +66,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mRefreshLayout = (TwinklingRefreshLayout) findViewById(R.id.refresh_layout);
 
+        rl_comment = (RelativeLayout) findViewById(R.id.rl_comment);
+        rl_comment.setAlpha(0.8F);
+        et_comment = (EditText) findViewById(R.id.et_comment);
+        ib_send = (ImageView) findViewById(R.id.ib_send);
+
         setupRecyclerView();
         setupRefreshLayout();
 
@@ -67,6 +81,23 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
             }
         });
 
+
+        et_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    rl_comment.setBackgroundColor(getResources().getColor(R.color.white));
+                }else{
+                    rl_comment.setAlpha(0.7F);
+                }
+            }
+        });
+        ib_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 
@@ -78,6 +109,19 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
         mPostDetailAdapter = new PostDetailAdapter(this,testData());
         mPostDetailAdapter.setOnMoreReplyClickListener(this);
         mRecyclerView.setAdapter(mPostDetailAdapter);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                //滑动完成
+                if (newState == RecyclerView.SCROLL_STATE_IDLE){
+                    rl_comment.setAlpha(0.8F);
+                }else{
+                    rl_comment.setAlpha(0.1F);
+                }
+            }
+        });
     }
 
     private void setupRefreshLayout(){
@@ -190,5 +234,10 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
     public void onMoreReplyClick(View v) {
         Intent intent = new Intent(this,ReplyDetailActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
