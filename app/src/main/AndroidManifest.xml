@@ -91,6 +91,9 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+
+        <activity android:name=".module.assistant.PreventCheatsGameActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

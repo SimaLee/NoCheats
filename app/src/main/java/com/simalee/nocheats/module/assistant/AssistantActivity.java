@@ -1,5 +1,6 @@
 package com.simalee.nocheats.module.assistant;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -48,6 +49,8 @@ public class AssistantActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Snackbar.make(v,"你点击了Game",Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(AssistantActivity.this,PreventCheatsGameActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -37,6 +37,8 @@ import com.simalee.nocheats.module.account.view.AccountManagement.SetSexActivity
 import com.simalee.nocheats.module.account.view.AccountManagement.SetSignatureActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.cookie.CookieJarImpl;
+import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 /**
  * Created by Lee Sima on 2017/6/15.
@@ -93,6 +96,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
         setContentView(R.layout.activity_account_management);
         EventBus.getDefault().register(this);
         init();
+        initOkhttp();
         getUserMsg();
     }
     public void init() {
@@ -122,6 +126,16 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
         tv_login_out.setOnClickListener(this);
 
         mTakePhotoPickPhotoUtils = new TakePhotoPickPhotoUtils(AccountManagementActivity.this,500);
+    }
+    private void initOkhttp(){
+        //配置OkHttp
+        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .cookieJar(cookieJar)
+                //其他配置
+                .build();
+
+        OkHttpUtils.initClient(okHttpClient);
     }
 
     private void getUserMsg(){
@@ -396,11 +410,9 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
         LogUtils.i(TAG, mTakePhotoPickPhotoUtils.getImageCropUri().getPath().toString());
         if (targetFile.exists()) {
             LogUtils.i(TAG, targetFile.getName() + "已存在");
-            //文件上传不上去？？？？原因未知
             OkHttpUtils.post()
-                    .addParams("u_id",PreferenceUtil.getString(AccountManagementActivity.this,PreferenceUtil.USER_ID))
                     .addFile("file", targetFile.getName(), targetFile)
-                    .url(Constant.Url.URL_EDIT_USER_LOGO)
+                    .url(Constant.Url.URL_UPLOAD_POST_PIC)
                     .build()
                     .execute(new StringCallback() {
                         @Override
@@ -419,6 +431,29 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                                     cv_user_head.setImageBitmap(BitmapFactory.decodeFile(targetFile.getAbsolutePath()));
                                     EventBus.getDefault().post(new EditPersonalInfoEvent(1,head_url));
                                     LogUtils.d(TAG,"head_url: "+ head_url);
+                                    OkHttpUtils.post()
+                                            .url(Constant.Url.URL_EDIT_USER_LOGO)
+                                            .addParams("u_id",PreferenceUtil.getString(AccountManagementActivity.this,PreferenceUtil.USER_ID))
+                                            .addParams("file",head_url)
+                                            .build()
+                                            .execute(new StringCallback() {
+                                                @Override
+                                                public void onError(Call call, Exception e, int id) {
+                                                    LogUtils.d(TAG,e.toString());
+                                                }
+
+                                                @Override
+                                                public void onResponse(String response, int id) {
+                                                    try {
+                                                        JSONObject jsonObject1 = new JSONObject(response);
+                                                        LogUtils.d(TAG,"edit head: "+response);
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            });
+                                }else if(msg.equals("1")){
+                                    LogUtils.d(TAG,"上传图片文件失败");
                                 }
                             } catch (JSONException je) {
                                 LogUtils.d(TAG,je.toString());

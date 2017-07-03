@@ -35,4 +35,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/glide-3.7.0.jar')
     compile 'com.lovedise:permissiongen:0.0.6'
+    compile 'com.bigmercu.cBox:cbox:1.08'
 }

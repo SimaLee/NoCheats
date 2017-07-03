@@ -20,4 +20,7 @@
 
     //------------------------------------------------
     <string name="user_name">no cheats</string>
+    <string name="game_tips">这是一个小游戏，根据场景你可以有自己的选择，最终系统会根据你的选择来给出相对应的建议，来开始我们的游戏吧，提高我们的防骗意识！！</string>
+    <string name="next_step">下一步</string>
+    <string name="toolbar_name_game">防骗小游戏</string>
 </resources>

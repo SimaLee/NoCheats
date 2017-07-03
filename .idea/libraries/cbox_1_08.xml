@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="cbox-1.08">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.bigmercu.cBox/cbox/1.08/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.bigmercu.cBox/cbox/1.08/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.bigmercu.cBox/cbox/1.08/dadf8abff48f8db2dfbc2a15aab01ed590c2dd0c/cbox-1.08-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

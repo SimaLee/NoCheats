@@ -29,6 +29,7 @@ public class Constant {
         public static final String URL_EDIT_USER_GENDER = BASE_URL+"editUserGender.action";
         public static final String URL_CHANGE_USER_PASSWORD = BASE_URL+"changePwd.action";
         public static final String URL_EDIT_USER_LOGO = BASE_URL+"editUserLogo.action";
+        public static final String URL_UPLOAD_POST_PIC = BASE_URL+"uploadPostPic.action";
     }
 
     public class UserInfo{
