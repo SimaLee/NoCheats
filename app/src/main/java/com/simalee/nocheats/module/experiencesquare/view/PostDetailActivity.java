@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -130,6 +131,8 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
         mRefreshLayout.setHeaderView(header);
         mRefreshLayout.setFloatRefresh(true);
         mRefreshLayout.setOverScrollTopShow(false);
+        // 不用下拉刷新
+        mRefreshLayout.setEnableRefresh(false);
         header.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorAccent);
         /*SinaRefreshView headerView = new SinaRefreshView(this);
         headerView.setTextColor(0xff745D5C);
@@ -230,14 +233,20 @@ public class PostDetailActivity extends BaseActivity implements PostDetailAdapte
         return data;
     }
 
-    @Override
-    public void onMoreReplyClick(View v) {
-        Intent intent = new Intent(this,ReplyDetailActivity.class);
-        startActivity(intent);
-    }
+
+
+
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void onMoreReplyClick(View v, List<ReplyReplyEntity> replyReplyEntities) {
+
+        LogUtils.d(TAG,"replyReplyList: "+ replyReplyEntities.toString());
+        Intent intent = new Intent(this,ReplyDetailActivity.class);
+        startActivity(intent);
     }
 }

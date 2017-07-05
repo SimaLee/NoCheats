@@ -19,6 +19,8 @@ public class Constant {
         public static final String URL_CHECK_NAME = BASE_URL + "checkName.action";
         public static final String URL_EDIT_NICKNAME = BASE_URL + "editUserName.action";
 
+        public static final String URL_RELEASE_POST = BASE_URL + "pubPost.action";
+        public static final String URL_LOAD_POST = BASE_URL +"checkPostList.action";
 
         //-----------------------------------------------------------
         public static final String URL_GET_USER_INFORMATION = BASE_URL +"checkUserInf.action";

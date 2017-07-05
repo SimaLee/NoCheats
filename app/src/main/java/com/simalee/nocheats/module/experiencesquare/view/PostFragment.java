@@ -3,10 +3,8 @@ package com.simalee.nocheats.module.experiencesquare.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +31,7 @@ import java.util.List;
  * Created by Lee Sima on 2017/6/19.
  */
 
-public class PostFragment extends BaseFragment implements PostsContract.View{
+public class PostFragment extends BaseFragment implements PostsContract.AllPostsView {
     private static final String TAG = PostFragment.class.getSimpleName();
 
     private Context mContext;
@@ -80,12 +78,11 @@ public class PostFragment extends BaseFragment implements PostsContract.View{
         }else{
 
             CURRENT_INDEX = getArguments().getInt(KEY_INDEX,PAGE_MAIN);
-
         }
 
         LogUtils.d(TAG,"onCreate current page is ："+CURRENT_INDEX);
         //TODO 使用 presenter 获取数据填充.
-        mPostAdapter = new PostAdapter(new ArrayList<PostEntity>(0));
+        mPostAdapter = new PostAdapter(mContext,new ArrayList<PostEntity>(0));
 
         mPresenter = new PostsPresenter(this,CURRENT_INDEX);
 
@@ -223,7 +220,7 @@ public class PostFragment extends BaseFragment implements PostsContract.View{
     }
 
     @Override
-    public void hindLoadingProgress() {
+    public void hideLoadingProgress() {
         mRefreshLayout.finishRefreshing();
     }
 
@@ -233,7 +230,7 @@ public class PostFragment extends BaseFragment implements PostsContract.View{
     }
 
     @Override
-    public void hindLoadingMoreProgress() {
+    public void hideLoadingMoreProgress() {
         mRefreshLayout.finishLoadmore();
     }
 

@@ -1,5 +1,6 @@
 package com.simalee.nocheats.module.experiencesquare.view;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
@@ -10,7 +11,7 @@ import com.simalee.nocheats.common.base.BaseActivity;
  * Created by Lee Sima on 2017/6/27.
  */
 
-public class ReplyDetailActivity extends BaseActivity {
+public class ReplyDetailActivity extends Activity {
 
     private static final String TAG = ReplyDetailActivity.class.getSimpleName();
 

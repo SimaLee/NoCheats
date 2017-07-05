@@ -54,7 +54,7 @@
         <activity android:name=".module.experiencesquare.view.NewPostActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".module.experiencesquare.view.ReplyDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/DialogStyle"/>
 
         <!-- experience module end -->
 

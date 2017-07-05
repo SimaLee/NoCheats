@@ -179,7 +179,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             setCommentReply(data.getRepliesList());
         }
 
-        private void setCommentReply(List<ReplyReplyEntity> replyList){
+        private void setCommentReply(final List<ReplyReplyEntity> replyList){
             if (replyList == null || replyList.size() == 0){
                 return;
             }
@@ -221,7 +221,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     public void onClick(View v) {
                         if (onMoreReplyClickListener != null){
                             Toast.makeText(mContext,"查看更多回复",Toast.LENGTH_SHORT).show();
-                            onMoreReplyClickListener.onMoreReplyClick(v);
+                            onMoreReplyClickListener.onMoreReplyClick(v,replyList);
                         }
 
                     }
@@ -232,7 +232,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public interface OnMoreReplyClickListener{
-        void onMoreReplyClick(View v);
+        void onMoreReplyClick(View v,List<ReplyReplyEntity> replyReplyEntities);
     }
 
     private OnMoreReplyClickListener onMoreReplyClickListener;
