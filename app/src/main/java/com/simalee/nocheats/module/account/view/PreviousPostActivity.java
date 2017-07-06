@@ -34,7 +34,7 @@ public class PreviousPostActivity extends BaseActivity {
 
 
     private RecyclerView mRecyclerView;
-    //private SwipeRefreshLayout mRefreshLayout;
+
     private TwinklingRefreshLayout mRefreshLayout;
     private PostAdapter mPostAdapter;
 
@@ -63,11 +63,11 @@ public class PreviousPostActivity extends BaseActivity {
             @Override
             public void onItemClick(int position, PostEntity postEntity) {
                 Intent intent = new Intent(PreviousPostActivity.this,PostDetailActivity.class);
-                intent.putExtra("123",postEntity.getPostTitle());
+                intent.putExtra("postId",postEntity.getPostTitle());
                 startActivity(intent);
             }
         });
-        mRecyclerView.setAdapter(mPostAdapter);
+
         mRecyclerView.setAdapter(mPostAdapter);
 
         setupRefreshLayout();
@@ -148,6 +148,7 @@ public class PreviousPostActivity extends BaseActivity {
         one.setPostTitle("大骗子");
         one.setPostType("网络诈骗");
         one.setPostContent("今天被骗了，好气啊");
+        one.setPoint("150");
         one.setPostViewCount(12);
         ArrayList<PostEntity> data = new ArrayList<>();
         data.add(one);

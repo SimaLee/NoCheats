@@ -182,21 +182,21 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 return;
             }
             if (replyList.size() == 1) {
-                tv_firstReply.setText(replyList.get(0).getTestMsg());
+                tv_firstReply.setText(replyList.get(0).toString());
                 tv_firstReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setVisibility(View.GONE);
                 tv_moreReply.setVisibility(View.GONE);
 
             } else if (replyList.size() == 2) {
-                tv_firstReply.setText(replyList.get(0).getTestMsg());
+                tv_firstReply.setText(replyList.get(0).toString());
                 tv_firstReply.setVisibility(View.VISIBLE);
-                tv_secondReply.setText(replyList.get(1).getTestMsg());
+                tv_secondReply.setText(replyList.get(1).toString());
                 tv_secondReply.setVisibility(View.VISIBLE);
                 tv_moreReply.setVisibility(View.GONE);
             } else {
-                tv_firstReply.setText(replyList.get(0).getTestMsg());
+                tv_firstReply.setText(replyList.get(0).toString());
                 tv_firstReply.setVisibility(View.VISIBLE);
-                tv_secondReply.setText(replyList.get(1).getTestMsg());
+                tv_secondReply.setText(replyList.get(1).toString());
                 tv_secondReply.setVisibility(View.VISIBLE);
                 tv_moreReply.setText("更多" + (replyList.size() - 2) + "条回复");
                 tv_moreReply.setVisibility(View.VISIBLE);

@@ -20,7 +20,14 @@ public class Constant {
         public static final String URL_EDIT_NICKNAME = BASE_URL + "editUserName.action";
 
         public static final String URL_RELEASE_POST = BASE_URL + "pubPost.action";
+        //下拉刷新和上拉加载使用同一个URL 参数 不同
         public static final String URL_LOAD_POST = BASE_URL +"checkPostList.action";
+        //获取帖子的详情
+        public static final String URL_GET_POST_DETAIL = BASE_URL + "checkPost.action";
+
+
+        //评论
+        public static final String URL_RELEASE_COMMENT = BASE_URL + "comment.action";
 
         //-----------------------------------------------------------
         public static final String URL_GET_USER_INFORMATION = BASE_URL +"checkUserInf.action";

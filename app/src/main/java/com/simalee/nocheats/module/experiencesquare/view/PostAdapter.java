@@ -38,12 +38,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
-    public void replaceData(List<PostEntity> postEntities){
-        postEntityList.clear();
-        postEntityList.addAll(postEntities);
-        notifyDataSetChanged();
-    }
-
     public PostAdapter(Context context, ArrayList<PostEntity> postEntityList){
         mContext = context;
         this.postEntityList = postEntityList;
@@ -128,5 +122,36 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     public interface OnRecyclerItemClickListener{
         void onItemClick(int position,PostEntity postEntity);
+    }
+
+
+    /**
+     * 将当前的数据替换为参数数据
+     * @param postEntities
+     */
+    public void replaceData(List<PostEntity> postEntities){
+        postEntityList.clear();
+        postEntityList.addAll(postEntities);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 在当前的数据中添加数据
+     * @param appendPostEntities
+     */
+    public void appendData(List<PostEntity> appendPostEntities){
+        postEntityList.addAll(appendPostEntities);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 获取当前列表最后的一个postEntity
+     * @return
+     */
+    public PostEntity getLastPostEntity(){
+        if (postEntityList == null || postEntityList.size() == 0){
+            throw new NullPointerException("Attend to get lastPostEntity in an empty postEntityList");
+        }
+        return postEntityList.get(postEntityList.size()-1);
     }
 }

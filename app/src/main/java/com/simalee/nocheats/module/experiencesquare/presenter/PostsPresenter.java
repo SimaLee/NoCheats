@@ -11,7 +11,9 @@ import com.simalee.nocheats.module.data.model.PostModel;
 import com.simalee.nocheats.module.experiencesquare.contract.PostsContract;
 import com.simalee.nocheats.module.experiencesquare.view.PostFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -70,7 +72,10 @@ public class PostsPresenter implements PostsContract.Presenter {
 
             mPostView.showLoadingProgress();
 
-            mPostModel.loadPosts(pageIndex, new IPostModel.LoadPostsCallback() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String last_time = dateFormat.format(new Date());
+
+            mPostModel.loadPosts(pageIndex,last_time, new IPostModel.LoadPostsCallback() {
                 @Override
                 public void onError(Exception e) {
                     LogUtils.e(TAG,"error:"+ e.toString());
@@ -78,14 +83,18 @@ public class PostsPresenter implements PostsContract.Presenter {
 
                 @Override
                 public void onLoadPostsSuccess(List<PostEntity> postEntities) {
-                    mPostView.hideLoadingProgress();
-                    mPostView.showPosts(postEntities);
+                    if (mPostView.isActive()){
+                        mPostView.hideLoadingProgress();
+                        mPostView.showPosts(postEntities);
+                    }
                 }
 
                 @Override
                 public void onLoadPostsFailure() {
-                    mPostView.hideLoadingProgress();
-                    mPostView.showLoadingFailure();
+                    if (mPostView.isActive()){
+                        mPostView.hideLoadingProgress();
+                        mPostView.showLoadingFailure();
+                    }
                 }
             });
 
@@ -94,27 +103,32 @@ public class PostsPresenter implements PostsContract.Presenter {
     }
 
     @Override
-    public void loadMorePosts(int pageIndex) {
+    public void loadMorePosts(int pageIndex,String lastTimeStr) {
         if (mPostView != null && mPostView.isActive()){
-            switch (pageIndex){
-                case PostFragment.PAGE_MAIN:
-                    //TODO 访问model
-                    mPostView.showLoadingMoreProgress();
-                    new Handler(Looper.myLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPostView.showPosts(testDataMore());
-                            mPostView.hideLoadingMoreProgress();
-                        }
-                    },2000);
-                    break;
-                default:
-                    mPostView.showLoadingMoreProgress();
-                    mPostView.showPosts(testDataMore());
-                    mPostView.hideLoadingMoreProgress();
-                    break;
-            }
+            mPostView.showLoadingMoreProgress();
 
+            mPostModel.loadPosts(pageIndex, lastTimeStr, new IPostModel.LoadPostsCallback() {
+                @Override
+                public void onError(Exception e) {
+                    LogUtils.e(TAG,"error:"+ e.toString());
+                }
+
+                @Override
+                public void onLoadPostsSuccess(List<PostEntity> postEntities) {
+                    if (mPostView.isActive()){
+                        mPostView.hideLoadingMoreProgress();
+                        mPostView.showLoadMorePosts(postEntities);
+                    }
+                }
+
+                @Override
+                public void onLoadPostsFailure() {
+                    if (mPostView.isActive()){
+                        mPostView.hideLoadingMoreProgress();
+                        mPostView.showLoadingFailure();
+                    }
+                }
+            });
         }
     }
 
@@ -124,7 +138,7 @@ public class PostsPresenter implements PostsContract.Presenter {
             throw new NullPointerException(" postPresenter:postEntity is null");
         }
         if (mPostView!= null && mPostView.isActive()){
-            mPostView.showPostDetail(postEntity.getId());
+            mPostView.showPostDetail(postEntity.getId(),postEntity.getPostTime(),postEntity.getPostTitle());
         }
     }
 

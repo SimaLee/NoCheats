@@ -20,8 +20,9 @@ public interface PostsContract {
     interface AllPostsView extends BaseView<PostsContract.Presenter>{
 
         void showPosts(List<PostEntity> postEntities);
+        void showLoadMorePosts(List<PostEntity> appendPostEntities);
 
-        void showPostDetail(String postId);
+        void showPostDetail(String postId,String postTime,String postTitle);
         void showNoPosts();
         void showLoadingProgress();
         void hideLoadingProgress();
@@ -47,7 +48,7 @@ public interface PostsContract {
 
         void loadPosts(int pageIndex);
 
-        void loadMorePosts(int pageIndex);
+        void loadMorePosts(int pageIndex,String lastTimeStr);
 
         void openPostDetails(PostEntity postEntity);
 

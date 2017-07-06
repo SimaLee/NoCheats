@@ -10,11 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.util.SpannableStringUtils;
-import com.simalee.nocheats.module.data.entity.post.PostCommentReplyEntity;
+import com.simalee.nocheats.module.data.entity.post.PostDetailFloorEntity;
 import com.simalee.nocheats.module.data.entity.ICommentEntity;
-import com.simalee.nocheats.module.data.entity.post.PostCommentEntity;
+import com.simalee.nocheats.module.data.entity.post.PostDetailMainFloorConverter;
 import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
 
 import java.util.List;
@@ -60,9 +64,9 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeaderViewHolder){
-            ((HeaderViewHolder) holder).bindData((PostCommentEntity) commentEntityList.get(position));
+            ((HeaderViewHolder) holder).bindData((PostDetailMainFloorConverter) commentEntityList.get(position));
         }else if (holder instanceof CommentViewHolder){
-            ((CommentViewHolder) holder).bindData((PostCommentReplyEntity) commentEntityList.get(position));
+            ((CommentViewHolder) holder).bindData((PostDetailFloorEntity) commentEntityList.get(position));
         }
     }
 
@@ -111,17 +115,26 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             iv_postPic = (ImageView) rootView.findViewById(R.id.iv_pic);
         }
 
-        public void bindData(PostCommentEntity data){
+        public void bindData(PostDetailMainFloorConverter data){
             if (data == null){
                 return;
             }
             tv_postTitle.setText(data.getPostTitle());
-            //image_user.setImageDrawable();
-            tv_userName.setText(data.getUserName());
+
+            Glide.with(mContext)
+                    .load(data.getCommentUserAvatar())
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            image_user.setImageDrawable(glideDrawable);
+                        }
+                    });
+
+            tv_userName.setText(data.getCommentUserName());
             //tv_isHost 不用设置
-            tv_level.setText(data.getPoint());
-            tv_postType.setText(data.getPostType());
-            tv_postContent.setText(data.getPostContent());
+            tv_level.setText(data.getCommentUserPoint());
+            //tv_postType.setText();
+            tv_postContent.setText(data.getCommentContent());
         }
     }
 
@@ -130,7 +143,6 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      *  其他回复的view
      */
     public class CommentViewHolder extends RecyclerView.ViewHolder{
-
 
         CircleImageView image_user;
         TextView tv_userName;
@@ -162,7 +174,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         }
 
-        public void bindData(PostCommentReplyEntity data){
+        public void bindData(PostDetailFloorEntity data){
             //image_user;
             tv_userName.setText(data.getCommentUserName());
 
@@ -180,7 +192,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         private void setCommentReply(final List<ReplyReplyEntity> replyList){
-            if (replyList == null || replyList.size() == 0){
+            if (replyList   == null || replyList.size() == 0){
+
+                setNoReplyView();
+
                 return;
             }
             if (replyList.size() == 1){
@@ -229,6 +244,15 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
 
+        /**
+         * 设置没有评论时的状态。
+         */
+        private void setNoReplyView(){
+            tv_firstReply.setVisibility(View.GONE);
+            tv_secondReply.setVisibility(View.GONE);
+            tv_moreReply.setVisibility(View.GONE);
+        }
+
     }
 
     public interface OnMoreReplyClickListener{
@@ -241,5 +265,35 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         onMoreReplyClickListener = listener;
     }
 
+    /**
+     * 替换数据
+     * @param data
+     */
+    public void replaceData(List<ICommentEntity> data){
+        commentEntityList.clear();
+        commentEntityList.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 附加数据
+     * @param moreData
+     */
+    public void appendData(List<ICommentEntity> moreData){
+        commentEntityList.addAll(moreData);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 此处需要处理没有回复的问题
+     * @return
+     */
+    public ICommentEntity getLastEntity(){
+        if (commentEntityList == null){
+            throw new NullPointerException("Attend to get last entity in an empty object");
+
+        }
+        return  commentEntityList.get(commentEntityList.size()-1);
+    }
 
 }

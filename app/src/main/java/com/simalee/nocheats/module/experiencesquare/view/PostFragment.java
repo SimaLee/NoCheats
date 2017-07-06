@@ -174,7 +174,8 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 LogUtils.d(TAG,"上拉加载更多");
-                mPresenter.loadMorePosts(CURRENT_INDEX);
+                PostEntity lastPost = mPostAdapter.getLastPostEntity();
+                mPresenter.loadMorePosts(CURRENT_INDEX,lastPost.getPostTime());
             }
 
             @Override
@@ -201,11 +202,18 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
         mPostAdapter.replaceData(postEntities);
     }
 
+    @Override
+    public void showLoadMorePosts(List<PostEntity> appendPostEntities) {
+        mPostAdapter.appendData(appendPostEntities);
+    }
+
 
     @Override
-    public void showPostDetail(String postId) {
+    public void showPostDetail(String postId,String postTime,String postTitle) {
         Intent intent = new Intent(mContext,PostDetailActivity.class);
-        intent.putExtra("123",postId);
+        intent.putExtra("postId",postId);
+        intent.putExtra("postTime",postTime);
+        intent.putExtra("postTitle",postTitle);
         startActivity(intent);
     }
 
@@ -236,7 +244,7 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
 
     @Override
     public void showLoadingFailure() {
-        Snackbar.make(mRecyclerView,"加载失败",1000).show();
+        Snackbar.make(mRecyclerView,"加载失败",2000).show();
     }
 
     @Override
