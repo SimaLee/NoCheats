@@ -1,7 +1,11 @@
 package com.simalee.nocheats.module.experiencesquare.contract;
 
+import android.net.Uri;
+import android.widget.ImageView;
+
 import com.simalee.nocheats.common.base.BasePresenter;
 import com.simalee.nocheats.common.base.BaseView;
+import com.simalee.nocheats.common.base.Response;
 import com.simalee.nocheats.module.data.entity.post.PostEntity;
 
 import java.util.List;
@@ -13,15 +17,17 @@ import java.util.List;
 
 public interface PostsContract {
 
-    interface View extends BaseView<PostsContract.Presenter>{
-        void showPosts(List<PostEntity> postEntities);
+    interface AllPostsView extends BaseView<PostsContract.Presenter>{
 
-        void showPostDetail(String postId);
+        void showPosts(List<PostEntity> postEntities);
+        void showLoadMorePosts(List<PostEntity> appendPostEntities);
+
+        void showPostDetail(String postId,String postTime,String postTitle);
         void showNoPosts();
         void showLoadingProgress();
-        void hindLoadingProgress();
+        void hideLoadingProgress();
         void showLoadingMoreProgress();
-        void hindLoadingMoreProgress();
+        void hideLoadingMoreProgress();
         void showLoadingFailure();
 
         //用于异步任务中判断是否可以操作界面
@@ -29,11 +35,25 @@ public interface PostsContract {
     }
 
 
+    interface NewPostView extends BaseView<Presenter>{
+        void showLoadingProgress();
+        void hideLoadingProgress();
+
+        void showPostReleasedSuccess();
+        void showPostReleasedFailed(String reason);
+
+    }
+
     interface Presenter extends BasePresenter{
 
         void loadPosts(int pageIndex);
-        void loadMorePosts(int pageIndex);
+
+        void loadMorePosts(int pageIndex,String lastTimeStr);
+
         void openPostDetails(PostEntity postEntity);
+
+
+        void releasePost(String userId,String postTitle,String postType,String postContent,String postPicUrl);
 
     }
 }

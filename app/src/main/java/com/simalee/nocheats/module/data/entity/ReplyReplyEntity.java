@@ -1,5 +1,7 @@
 package com.simalee.nocheats.module.data.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -13,20 +15,22 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
     public ReplyReplyEntity() {
     }
 
-    String testMsg;
 
     /**
      *  回复人ID
      */
+    @SerializedName("u_id")
     String subjectId;
     /**
      *  回复人昵称
      */
+    @SerializedName("u_name")
     String subjectName;
 
     /**
      *  回复人是否楼主
      */
+    @SerializedName("u_host")
     boolean isHost;
 
 
@@ -37,14 +41,20 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
     /**
      *  被回复人昵称
      */
+    @SerializedName("r_name")
     String objectName;
 
     /**
      *  回复内容
      */
+    @SerializedName("content")
     String content;
 
-    //暂无回复时间
+    /**
+     * 回复时间
+     */
+    @SerializedName("time")
+    String replyTime;
 
 
     public boolean isReply() {
@@ -55,17 +65,12 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
         isReply = reply;
     }
 
-    @Override
-    public String toString() {
-        return "ReplyReplyEntity{" +
-                "content='" + content + '\'' +
-                ", testMsg='" + testMsg + '\'' +
-                ", subjectId='" + subjectId + '\'' +
-                ", subjectName='" + subjectName + '\'' +
-                ", isHost=" + isHost +
-                ", isReply=" + isReply +
-                ", objectName='" + objectName + '\'' +
-                '}';
+    public String getReplyTime() {
+        return replyTime;
+    }
+
+    public void setReplyTime(String replyTime) {
+        this.replyTime = replyTime;
     }
 
     public String getContent() {
@@ -108,16 +113,16 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
         this.subjectName = subjectName;
     }
 
-    public String getTestMsg() {
-        return testMsg;
+    @Override
+    public String toString() {
+        return "ReplyReplyEntity{" +
+                "content='" + content + '\'' +
+                ", subjectId='" + subjectId + '\'' +
+                ", subjectName='" + subjectName + '\'' +
+                ", isHost=" + isHost +
+                ", isReply=" + isReply +
+                ", objectName='" + objectName + '\'' +
+                ", replyTime='" + replyTime + '\'' +
+                '}';
     }
-
-    public void setTestMsg(String testMsg) {
-        this.testMsg = testMsg;
-    }
-
-    public ReplyReplyEntity(String testMsg) {
-        this.testMsg = testMsg;
-    }
-
 }

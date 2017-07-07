@@ -115,6 +115,7 @@ public class MainActivity extends BaseActivity
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this,"点击了用户头像",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, AccountManagementActivity.class);
+                drawer.closeDrawers();
                 startActivity(intent);
             }
         });
@@ -150,7 +151,7 @@ public class MainActivity extends BaseActivity
                                 String msg = jsonObject.getString("msg");
                                 String userInf = jsonObject.getString("userInf");
                                 LogUtils.d(TAG,userInf);
-                                if(msg.equals("1")){
+                                if(msg.equals("0")){
                                     if(userInf.equals("null")){
                                         cv_user_head.setImageResource(R.mipmap.testimage);
                                         tv_user_name.setText(Constant.UserInfo.USER_NAME);

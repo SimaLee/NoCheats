@@ -77,7 +77,7 @@ public class TopicDetailActivity extends BaseActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
 
-        mTopicDetailAdapter = new TopicDetailAdapter(this,testData());
+        mTopicDetailAdapter = new TopicDetailAdapter(this,new ArrayList<ICommentEntity>(0));
         mRecyclerView.setAdapter(mTopicDetailAdapter);
     }
 
@@ -141,7 +141,7 @@ public class TopicDetailActivity extends BaseActivity {
         });
     }
 
-    private ArrayList<ICommentEntity> testData(){
+   /* private ArrayList<ICommentEntity> testData(){
 
         ArrayList<ICommentEntity> data = new ArrayList<>();
         TopicCommentEntity one = new TopicCommentEntity();
@@ -188,6 +188,6 @@ public class TopicDetailActivity extends BaseActivity {
         data.add(comment2);
 
         return data;
-    }
+    }*/
 
 }

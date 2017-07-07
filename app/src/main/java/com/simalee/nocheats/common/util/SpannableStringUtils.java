@@ -48,7 +48,7 @@ public class SpannableStringUtils {
             resBuilder.append(isHost);
         }
 
-        if (entity.isReply()){
+        if (entity.getObjectName() != null || !("null".equals(entity.getObjectName()))){
             // 回复 某某某 :
             SpannableString replyToObjectName = new SpannableString(" 回复 "+ entity.getObjectName()+" :");
             resBuilder.append(replyToObjectName);
