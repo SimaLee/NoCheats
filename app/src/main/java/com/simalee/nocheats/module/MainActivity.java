@@ -1,12 +1,9 @@
 package com.simalee.nocheats.module;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +12,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +26,8 @@ import com.simalee.nocheats.common.util.PreferenceUtil;
 import com.simalee.nocheats.common.view.CircleImageView;
 import com.simalee.nocheats.module.account.view.AccountManagement.EditPersonalInfoEvent;
 import com.simalee.nocheats.module.account.view.AccountManagementActivity;
-import com.simalee.nocheats.module.account.view.PreviousPostActivity;
-import com.simalee.nocheats.module.account.view.PreviousTopicActivity;
+import com.simalee.nocheats.module.experiencesquare.view.PreviousPostActivity;
+import com.simalee.nocheats.module.topicsquare.view.PreviousTopicActivity;
 import com.simalee.nocheats.module.assistant.AssistantActivity;
 import com.simalee.nocheats.module.experiencesquare.view.ExperienceSquareFragment;
 import com.simalee.nocheats.module.topicsquare.view.TopicSquareFragment;

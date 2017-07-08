@@ -18,10 +18,10 @@
             >
         </activity>
         <!-- account module start -->
-        <activity android:name=".module.account.view.PreviousPostActivity"
+        <activity android:name=".module.experiencesquare.view.PreviousPostActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity android:name=".module.account.view.PreviousTopicActivity"
+        <activity android:name=".module.topicsquare.view.PreviousTopicActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".module.account.view.AccountManagementActivity"

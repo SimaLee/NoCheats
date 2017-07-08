@@ -1,4 +1,4 @@
-package com.simalee.nocheats.module.account.view;
+package com.simalee.nocheats.module.topicsquare.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

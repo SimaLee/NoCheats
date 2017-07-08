@@ -81,7 +81,7 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
         }
 
         LogUtils.d(TAG,"onCreate current page is ："+CURRENT_INDEX);
-        //TODO 使用 presenter 获取数据填充.
+
         mPostAdapter = new PostAdapter(mContext,new ArrayList<PostEntity>(0));
 
         mPresenter = new PostsPresenter(this,CURRENT_INDEX);
@@ -105,8 +105,10 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         LogUtils.d(TAG,"onCreateView current page is ："+CURRENT_INDEX);
         View rootView = inflater.inflate(R.layout.fragment_base,container,false);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRefreshLayout = (TwinklingRefreshLayout) rootView.findViewById(R.id.refresh_layout);
+
         setupRecyclerView();
         setupRefreshLayout();
         return rootView;

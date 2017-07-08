@@ -106,4 +106,34 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
     public interface OnRecyclerItemClickListener{
         void onItemClick(int position,TopicEntity topicEntity);
     }
+
+    /**
+     * 替换数据
+     * @param topicEntities
+     */
+    public void replaceData(List<TopicEntity> topicEntities){
+        topicEntityList.clear();
+        topicEntityList.addAll(topicEntities);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 添加数据
+     * @param appendTopicEntities
+     */
+    public void appendData(List<TopicEntity> appendTopicEntities){
+        topicEntityList.addAll(appendTopicEntities);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 获取最后一个entity
+     * @return
+     */
+    public TopicEntity getLastEntity(){
+        if (topicEntityList == null || topicEntityList.size() == 0){
+            throw new NullPointerException("Attend to get lastEntity in an empty topicEntityList");
+        }
+        return topicEntityList.get(topicEntityList.size()-1);
+    }
 }

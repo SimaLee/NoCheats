@@ -25,6 +25,8 @@ public class Constant {
         //获取帖子的详情
         public static final String URL_GET_POST_DETAIL = BASE_URL + "checkPost.action";
 
+        //查看我的帖子
+        public static final String URL_LOAD_MY_POST = BASE_URL + "checkMyPost.action";
 
         //评论
         public static final String URL_RELEASE_COMMENT = BASE_URL + "comment.action";
