@@ -26,6 +26,12 @@ public interface IPostModel {
         void onLoadPostsFailure();
     }
 
+    interface LoadMyPostCallback{
+        void onError(Exception e);
+        void onLoadPostsSuccess(List<PostEntity> postEntities);
+        void onLoadPostsFailure();
+    }
+
 
     interface LoadPostDetailCallback{
         void onError(Exception e);
@@ -43,6 +49,8 @@ public interface IPostModel {
                      String postContent,String postPicUrl,ReleasePostCallback callback);
 
     void loadPosts(int pageIndex,String lastTimeStr,LoadPostsCallback callback);
+
+    void loadMyPosts(String userId,int postType,String lastTimeStr,LoadMyPostCallback callback);
 
     void loadPostDetail(String postId,String lastTimeStr,LoadPostDetailCallback callback);
 

@@ -1,10 +1,12 @@
 package com.simalee.nocheats.module.data.model;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.AllPostsGson;
+import com.simalee.nocheats.module.data.entity.post.MyPostsGson;
 import com.simalee.nocheats.module.data.entity.post.PostDetailGson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
@@ -141,6 +143,52 @@ public class PostModel implements IPostModel{
                 });
 
 
+    }
+
+    /**
+     * 获取我的帖子
+     * 主页是 0
+     * @param userId
+     * @param postType
+     * @param lastTimeStr
+     * @param callback
+     */
+    @Override
+    public void loadMyPosts(String userId, int postType, String lastTimeStr, final LoadMyPostCallback callback) {
+        if (callback == null){
+            return;
+        }
+        OkHttpUtils.post()
+                .url(Constant.Url.URL_LOAD_MY_POST)
+                .addParams("u_id",userId)
+                .addParams("type",postType+"")
+                .addParams("last_time",lastTimeStr)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onError(e);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.d(TAG,"onResponse: "+ response);
+
+                        try {
+                            MyPostsGson postsGson = mGsonParser.fromJson(response,MyPostsGson.class);
+                            String msg = postsGson.getMsg();
+
+                            if ("0".equals(msg)){
+                                callback.onLoadPostsSuccess(postsGson.getPostEntityList());
+                            }else if ("1".equals(msg)){
+                                callback.onLoadPostsFailure();
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
     }
 
     /**

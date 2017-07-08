@@ -1,14 +1,16 @@
-package com.simalee.nocheats.module.account.view;
+package com.simalee.nocheats.module.experiencesquare.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -17,21 +19,21 @@ import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.util.LogUtils;
+import com.simalee.nocheats.common.util.PreferenceUtil;
 import com.simalee.nocheats.module.data.entity.post.PostEntity;
-import com.simalee.nocheats.module.experiencesquare.view.DividerItemDecoration;
-import com.simalee.nocheats.module.experiencesquare.view.PostAdapter;
-import com.simalee.nocheats.module.experiencesquare.view.PostDetailActivity;
+import com.simalee.nocheats.module.experiencesquare.contract.PreviousPostContract;
+import com.simalee.nocheats.module.experiencesquare.presenter.PreviousPostPresenter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lee Sima on 2017/6/15.
  */
 
-public class PreviousPostActivity extends BaseActivity {
+public class PreviousPostActivity extends BaseActivity implements PreviousPostContract.View{
 
     private static final String TAG = PreviousPostActivity.class.getSimpleName();
-
 
     private RecyclerView mRecyclerView;
 
@@ -40,11 +42,33 @@ public class PreviousPostActivity extends BaseActivity {
 
     private TextView tv_back;
 
+    private PreviousPostPresenter mPreviousPostPresenter;
+
+    String userId;
+
+    /**
+     * 用户发布的帖子类型 目前为 0 所有
+     */
+    int postType = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_previous_post);
+
+        userId = PreferenceUtil.getString(this,PreferenceUtil.USER_ID);
+
+        mPreviousPostPresenter = new PreviousPostPresenter(this);
+
         initViews();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mPreviousPostPresenter != null){
+            mPreviousPostPresenter.loadMyPosts(userId,postType);
+        }
     }
 
     private void initViews(){
@@ -58,13 +82,12 @@ public class PreviousPostActivity extends BaseActivity {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        mPostAdapter = new PostAdapter(this,testData());
+        mPostAdapter = new PostAdapter(this,new ArrayList<PostEntity>(0));
+
         mPostAdapter.setRecyclerItemClickListener(new PostAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(int position, PostEntity postEntity) {
-                Intent intent = new Intent(PreviousPostActivity.this,PostDetailActivity.class);
-                intent.putExtra("postId",postEntity.getPostTitle());
-                startActivity(intent);
+                mPreviousPostPresenter.openPostDetails(postEntity);
             }
         });
 
@@ -110,13 +133,8 @@ public class PreviousPostActivity extends BaseActivity {
 
             @Override
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
-                LogUtils.d(TAG,"上拉加载更多");
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.finishLoadmore();
-                    }
-                },5000);
+                PostEntity lastEntity = mPostAdapter.getLastPostEntity();
+                mPreviousPostPresenter.loadMoreMyPosts(userId,postType,lastEntity.getPostTime());
             }
 
             @Override
@@ -126,13 +144,8 @@ public class PreviousPostActivity extends BaseActivity {
 
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                refreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.finishRefreshing();
-                    }
-                },5000);
-                LogUtils.d(TAG,"下拉刷新");
+
+                mPreviousPostPresenter.loadMyPosts(userId,postType);
             }
 
             @Override
@@ -158,5 +171,63 @@ public class PreviousPostActivity extends BaseActivity {
         data.add(one);
 
         return data;
+    }
+
+    @Override
+    public void showPosts(List<PostEntity> postEntities) {
+        mPostAdapter.replaceData(postEntities);
+    }
+
+    @Override
+    public void showLoadMorePosts(List<PostEntity> appendPostEntities) {
+        mPostAdapter.appendData(appendPostEntities);
+    }
+
+    @Override
+    public void showPostDetail(String postId, String postTime, String postTitle) {
+        Intent intent = new Intent(this,PostDetailActivity.class);
+        intent.putExtra("postId",postId);
+        intent.putExtra("postTime",postTime);
+        intent.putExtra("postTitle",postTitle);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showNoPosts() {
+        showToastShort("当前还没有数据哦！");
+    }
+
+    @Override
+    public void showLoadingProgress() {
+        mRefreshLayout.startRefresh();
+    }
+
+    @Override
+    public void hideLoadingProgress() {
+        mRefreshLayout.finishRefreshing();
+    }
+
+    @Override
+    public void showLoadingMoreProgress() {
+        mRefreshLayout.startLoadMore();
+    }
+
+    @Override
+    public void hideLoadingMoreProgress() {
+        mRefreshLayout.finishLoadmore();
+    }
+
+    @Override
+    public void showLoadingFailure() {
+        Snackbar.make(mRefreshLayout,"加载失败",2000).show();
+    }
+
+    @Override
+    public void setPresenter(PreviousPostContract.Presenter presenter) {
+        //do noting
+    }
+
+    private void showToastShort(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();
     }
 }
