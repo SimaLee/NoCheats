@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,6 +66,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
     private final int CHANGE_NAME = 2;
     private final int CHANGE_SEX = 3;
     private final int CHANGE_SIGN = 4;
+    private final int FINISH = 5;
 
     private ImageView iv_back;
     private ImageView cv_user_head;
@@ -96,7 +98,6 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
         setContentView(R.layout.activity_account_management);
         EventBus.getDefault().register(this);
         init();
-        initOkhttp();
         getUserMsg();
     }
     public void init() {
@@ -159,7 +160,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                                 String msg = jsonObject.getString("msg");
                                 String userInf = jsonObject.getString("userInf");
                                 LogUtils.d(TAG,userInf);
-                                if(msg.equals("1")){
+                                if(msg.equals("0")){
                                     if(userInf.equals("null")){
                                         user_name = Constant.UserInfo.USER_NAME;
                                         gender = Constant.UserInfo.GENDER;
@@ -176,6 +177,9 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                                         String user_head_url = jsonObject1.getString("head_logo");
                                         gender = jsonObject1.getString("gender");
                                         birthday = jsonObject1.getString("birthday");
+                                        if(birthday.length()>=11){
+                                            birthday = birthday.substring(0, 10);
+                                        }
                                         sign = jsonObject1.getString("signature");
                                         info = jsonObject1.getString("introduction");
                                         tv_name.setText(user_name);
@@ -365,6 +369,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                 PreferenceUtil.setString(AccountManagementActivity.this,PreferenceUtil.IS_LOGIN,"0");
                 Intent login = new Intent(AccountManagementActivity.this,LoginActivity.class);
                 startActivity(login);
+                EventBus.getDefault().post(new EditPersonalInfoEvent(FINISH, ""));
                 finish();
                 break;
             case R.id.rl_change_passwd:
@@ -411,14 +416,15 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
         if (targetFile.exists()) {
             LogUtils.i(TAG, targetFile.getName() + "已存在");
             OkHttpUtils.post()
+                    .addParams("u_id", PreferenceUtil.getString(AccountManagementActivity.this, PreferenceUtil.USER_ID))
                     .addFile("file", targetFile.getName(), targetFile)
-                    .url(Constant.Url.URL_UPLOAD_POST_PIC)
+                    .url(Constant.Url.URL_EDIT_USER_LOGO)
                     .build()
                     .execute(new StringCallback() {
                         @Override
                         public void onError(Call call, Exception e, int id) {
-                            LogUtils.d(TAG, e.toString());
-                            Toast.makeText(AccountManagementActivity.this,"修改头像失败",Toast.LENGTH_SHORT).show();
+                            LogUtils.d(TAG, "error: " + e.toString());
+                            Toast.makeText(AccountManagementActivity.this, "修改头像失败", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
@@ -428,37 +434,20 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                                 String msg = jsonObject.getString("msg");
                                 if (msg.equals("0")) {
                                     String head_url = jsonObject.getString("id");
-                                    cv_user_head.setImageBitmap(BitmapFactory.decodeFile(targetFile.getAbsolutePath()));
-                                    EventBus.getDefault().post(new EditPersonalInfoEvent(1,head_url));
-                                    LogUtils.d(TAG,"head_url: "+ head_url);
-                                    OkHttpUtils.post()
-                                            .url(Constant.Url.URL_EDIT_USER_LOGO)
-                                            .addParams("u_id",PreferenceUtil.getString(AccountManagementActivity.this,PreferenceUtil.USER_ID))
-                                            .addParams("file",head_url)
-                                            .build()
-                                            .execute(new StringCallback() {
-                                                @Override
-                                                public void onError(Call call, Exception e, int id) {
-                                                    LogUtils.d(TAG,e.toString());
-                                                }
-
-                                                @Override
-                                                public void onResponse(String response, int id) {
-                                                    try {
-                                                        JSONObject jsonObject1 = new JSONObject(response);
-                                                        LogUtils.d(TAG,"edit head: "+response);
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                            });
-                                }else if(msg.equals("1")){
-                                    LogUtils.d(TAG,"上传图片文件失败");
+                                    EventBus.getDefault().post(new EditPersonalInfoEvent(1, head_url));
+                                    LogUtils.d(TAG, "head_url: " + head_url);
+                                    Glide.with(AccountManagementActivity.this)
+                                            .load(Constant.Url.BASE_URL + head_url)
+                                            .asBitmap()
+                                            .into(cv_user_head);
+//
+                                } else if (msg.equals("1")) {
+                                    LogUtils.d(TAG, "上传图片文件失败");
                                 }
                             } catch (JSONException je) {
-                                LogUtils.d(TAG,je.toString());
+                                LogUtils.d(TAG, "Execption:" + je.toString());
                                 je.printStackTrace();
-                                Toast.makeText(AccountManagementActivity.this,"修改头像失败",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AccountManagementActivity.this, "修改头像失败", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -477,6 +466,13 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                 break;
             case CHANGE_SEX:
                 tv_sex.setText(msg);
+                if(msg.equals("男")){
+                    gender = "1";
+                }else if(msg.equals("女")) {
+                    gender = "2";
+                }else{
+                    gender = "0";
+                }
                 break;
             case CHANGE_SIGN:
                 tv_signature.setText(msg);

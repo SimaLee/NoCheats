@@ -44,8 +44,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mLoginPresenter = new LoginPresenter(this);
         isLogin();
+        mLoginPresenter = new LoginPresenter(this);
         initOkhttp();
         initViews();
     }

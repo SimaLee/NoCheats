@@ -36,7 +36,7 @@ public class SetSexActivity extends BaseActivity implements View.OnClickListener
     private ImageView arrow_man;
     private ImageView arrow_woman;
 
-    private String sex = "0";
+    private String sex = "0"; //1代表男2代表女
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

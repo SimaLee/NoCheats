@@ -37,6 +37,8 @@ import com.simalee.nocheats.module.experiencesquare.view.ExperienceSquareFragmen
 import com.simalee.nocheats.module.topicsquare.view.TopicSquareFragment;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+import com.zhy.http.okhttp.cookie.CookieJarImpl;
+import com.zhy.http.okhttp.cookie.store.PersistentCookieStore;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,12 +47,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private final int CHANGE_HEAD = 1;
     private final int CHANGE_NAME = 2;
+    private final int FINISH = 6;
 
     private DrawerLayout drawer;
     private FloatingActionButton fab;
@@ -74,12 +78,22 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initOkhttp();
         EventBus.getDefault().register(this);
         initViews();
         getUserMsg();
     }
 
+    private void initOkhttp(){
+        //配置OkHttp
+        CookieJarImpl cookieJar = new CookieJarImpl(new PersistentCookieStore(getApplicationContext()));
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .cookieJar(cookieJar)
+                //其他配置
+                .build();
 
+        OkHttpUtils.initClient(okHttpClient);
+    }
     protected void initViews() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -145,7 +159,8 @@ public class MainActivity extends BaseActivity
 
                         @Override
                         public void onResponse(String response, int id) {
-                            LogUtils.d(TAG, "user_info: " + response);
+//                            LogUtils.d(TAG, "user_info: " + response);
+                            Log.i(TAG, response);
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 String msg = jsonObject.getString("msg");
@@ -157,6 +172,7 @@ public class MainActivity extends BaseActivity
                                         tv_user_name.setText(Constant.UserInfo.USER_NAME);
                                     }else{
                                         JSONObject jsonObject1 = new JSONObject(userInf);
+                                        Log.i(TAG, jsonObject1.getString("u_name"));
                                         String user_name = jsonObject1.getString("u_name");
                                         String user_head_url = jsonObject1.getString("head_logo");
                                         tv_user_name.setText(user_name);
@@ -274,9 +290,17 @@ public class MainActivity extends BaseActivity
         String msg = event.getMsg();
         switch (type){
             case CHANGE_HEAD:
+                Log.d(TAG, "receive url " + msg);
+                Glide.with(MainActivity.this)
+                        .load(Constant.Url.BASE_URL + msg)
+                        .asBitmap()
+                        .into(cv_user_head);
                 break;
             case CHANGE_NAME:
                 tv_user_name.setText(msg);
+                break;
+            case FINISH:
+                finish();
                 break;
         }
     }

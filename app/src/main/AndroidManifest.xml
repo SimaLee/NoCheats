@@ -15,7 +15,7 @@
         <activity
             android:name=".module.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask">
+            >
         </activity>
         <!-- account module start -->
         <activity android:name=".module.account.view.PreviousPostActivity"

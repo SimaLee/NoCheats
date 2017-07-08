@@ -1,6 +1,7 @@
 package com.simalee.nocheats.module.account.view.AccountManagement;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -75,6 +76,7 @@ public class SetNameActivity extends BaseActivity implements View.OnClickListene
                         @Override
                         public void onResponse(String response, int id) {
                             try {
+                                Log.i(TAG, response);
                                 JSONObject jsonObject = new JSONObject(response);
                                 String msg = jsonObject.getString("msg");
                                 if (msg.equals("0")) {

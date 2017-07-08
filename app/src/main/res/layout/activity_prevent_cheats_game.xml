@@ -29,11 +29,12 @@
             android:textColor="@android:color/white"/>
 
     </android.support.v7.widget.Toolbar>
+
     <RelativeLayout
         android:id="@+id/rl_game_start"
         android:layout_below="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true">
         <TextView
             android:id="@+id/tv_tips"
@@ -59,6 +60,7 @@
             android:layout_marginTop="60dp"
             android:background="@color/colorLogout"/>
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_below="@+id/title"
         android:id="@+id/rl_game_content"
@@ -70,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="10dp"
             android:textSize="16sp"
             android:textColor="@color/colorBdiduText"
             />
@@ -80,7 +82,7 @@
             android:layout_below="@+id/tv_situation"
             android:padding="5dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             app:check_text="算法1"
@@ -95,7 +97,7 @@
             android:layout_below="@+id/ck_choice_one"
             android:padding="5dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             app:check_text="算法2"
@@ -109,7 +111,7 @@
             android:layout_below="@+id/ck_choice_two"
             android:padding="5dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             app:check_text="算法3"
@@ -123,7 +125,7 @@
             android:layout_below="@+id/ck_choice_three"
             android:padding="5dp"
             android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             app:check_text="算法4"
@@ -132,6 +134,7 @@
             app:color_before="@color/colorPrimary"
             app:check_style="hook"
             />
+
 
         <TextView
             android:id="@+id/tv_next_step"
@@ -145,8 +148,30 @@
             android:gravity="center"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/tv_next_step"
+            android:textSize="16sp"
+            android:text="@string/system_friendly_tips"/>
+        <TextView
+            android:id="@+id/tv_advise"
+            android:layout_below="@+id/tv"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/colorAccent"
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </RelativeLayout>
