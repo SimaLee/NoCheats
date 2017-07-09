@@ -57,8 +57,9 @@
             android:layout_below="@id/tv_tips"
             android:text="@string/start_game"
             android:textSize="18sp"
+            android:textColor="#fff"
             android:layout_marginTop="60dp"
-            android:background="@color/colorLogout"/>
+            android:background="@drawable/bg_label_pink"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -141,7 +142,7 @@
             android:layout_below="@+id/ck_choice_four"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/colorLogout"
+            android:background="@drawable/bg_label_pink"
             android:text="@string/next_step"
             android:textSize="18sp"
             android:textColor="#fff"
@@ -151,27 +152,36 @@
             android:layout_marginTop="20dp"
             />
 
-        <TextView
-            android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="20dp"
+        <ScrollView
             android:layout_below="@id/tv_next_step"
-            android:textSize="16sp"
-            android:text="@string/system_friendly_tips"/>
-        <TextView
-            android:id="@+id/tv_advise"
-            android:layout_below="@+id/tv"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/colorAccent"
-            android:visibility="gone"/>
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="16sp"
+                    android:text="@string/system_friendly_tips"/>
+                <TextView
+                    android:id="@+id/tv_advise"
+                    android:layout_below="@+id/tv"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorAccent"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+        </ScrollView>
     </RelativeLayout>
+
 
 </RelativeLayout>

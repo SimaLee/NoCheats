@@ -373,14 +373,14 @@
                 <TextView
                     android:id="@+id/tv_logout"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorLogout"
+                    android:layout_height="40dp"
+                    android:background="@drawable/bg_label_pink"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="40dp"
                     android:layout_marginRight="40dp"
                     android:text="切换账号"
                     android:gravity="center"
-                    android:textSize="17sp"/>
+                    android:textSize="16sp"/>
 
             </RelativeLayout>
         </LinearLayout>

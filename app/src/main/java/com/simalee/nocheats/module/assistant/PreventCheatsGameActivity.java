@@ -34,7 +34,7 @@ public class PreventCheatsGameActivity extends BaseActivity implements View.OnCl
     private TextView tv_advise;
     private TextView tv_next_step;
     private TextView tv;
-    private String choice;
+    private String choice = "";
     private Game currentGame;
     private ArrayList<Situation> situations = new ArrayList<>();
     private Situation currentSituation;

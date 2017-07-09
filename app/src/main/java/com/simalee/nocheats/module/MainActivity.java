@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +22,7 @@ import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.base.BaseFragment;
 import com.simalee.nocheats.common.base.OnFabClickListener;
 import com.simalee.nocheats.common.config.Constant;
+import com.simalee.nocheats.common.util.DownloadImageTask;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.PreferenceUtil;
 import com.simalee.nocheats.common.view.CircleImageView;
@@ -50,7 +52,7 @@ public class MainActivity extends BaseActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private final int CHANGE_HEAD = 1;
     private final int CHANGE_NAME = 2;
-    private final int FINISH = 6;
+    private final int FINISH = 5;
 
     private DrawerLayout drawer;
     private FloatingActionButton fab;
@@ -172,10 +174,7 @@ public class MainActivity extends BaseActivity
                                         String user_name = jsonObject1.getString("u_name");
                                         String user_head_url = jsonObject1.getString("head_logo");
                                         tv_user_name.setText(user_name);
-                                        Glide.with(MainActivity.this)
-                                                .load(Constant.Url.BASE_URL + user_head_url)
-                                                .asBitmap()
-                                                .into(cv_user_head);
+                                        new DownloadImageTask(cv_user_head).execute(Constant.Url.BASE_URL +user_head_url);
                                     }
                                 }else{
                                     LogUtils.d(TAG,"获取个人信息失败");
@@ -287,10 +286,7 @@ public class MainActivity extends BaseActivity
         switch (type){
             case CHANGE_HEAD:
                 Log.d(TAG, "receive url " + msg);
-                Glide.with(MainActivity.this)
-                        .load(Constant.Url.BASE_URL + msg)
-                        .asBitmap()
-                        .into(cv_user_head);
+                new DownloadImageTask(cv_user_head).execute(Constant.Url.BASE_URL + msg);
                 break;
             case CHANGE_NAME:
                 tv_user_name.setText(msg);

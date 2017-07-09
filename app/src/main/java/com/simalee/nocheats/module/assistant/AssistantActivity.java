@@ -41,14 +41,14 @@ public class AssistantActivity extends BaseActivity {
         btnTips.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v,"你点击了Tips",Snackbar.LENGTH_LONG).show();
+                Intent intent = new Intent(AssistantActivity.this, PreventCheatsTipsActivity.class);
+                startActivity(intent);
             }
         });
 
         btnGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v,"你点击了Game",Snackbar.LENGTH_LONG).show();
                 Intent intent = new Intent(AssistantActivity.this,PreventCheatsGameActivity.class);
                 startActivity(intent);
             }
