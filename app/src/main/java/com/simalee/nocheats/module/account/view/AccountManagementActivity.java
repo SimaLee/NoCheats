@@ -24,6 +24,7 @@ import com.bumptech.glide.Glide;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.config.Constant;
+import com.simalee.nocheats.common.util.DownloadImageTask;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.PreferenceUtil;
 import com.simalee.nocheats.common.util.TakePhotoPickPhotoUtils;
@@ -183,10 +184,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                                         sign = jsonObject1.getString("signature");
                                         info = jsonObject1.getString("introduction");
                                         tv_name.setText(user_name);
-                                        Glide.with(AccountManagementActivity.this)
-                                                .load(Constant.Url.BASE_URL + user_head_url)
-                                                .asBitmap()
-                                                .into(cv_user_head);
+                                        new DownloadImageTask(cv_user_head).execute(Constant.Url.BASE_URL +user_head_url);
                                         tv_birthday.setText(birthday);
                                         tv_signature.setText(sign);
                                         if(gender.equals("1")){
@@ -339,10 +337,11 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                 showPopUpWindow();
                 break;
             case R.id.rl_set_name:
-                bundle.putString("name", user_name);
-                Intent a = new Intent(AccountManagementActivity.this, SetNameActivity.class);
-                a.putExtras(bundle);
-                startActivity(a);
+                Toast.makeText(AccountManagementActivity.this, "昵称不可修改", Toast.LENGTH_SHORT).show();
+//                bundle.putString("name", user_name);
+//                Intent a = new Intent(AccountManagementActivity.this, SetNameActivity.class);
+//                a.putExtras(bundle);
+//                startActivity(a);
                 break;
             case R.id.rl_set_sex:
                 Intent b = new Intent(AccountManagementActivity.this, SetSexActivity.class);
@@ -436,10 +435,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                                     String head_url = jsonObject.getString("id");
                                     EventBus.getDefault().post(new EditPersonalInfoEvent(1, head_url));
                                     LogUtils.d(TAG, "head_url: " + head_url);
-                                    Glide.with(AccountManagementActivity.this)
-                                            .load(Constant.Url.BASE_URL + head_url)
-                                            .asBitmap()
-                                            .into(cv_user_head);
+                                    new DownloadImageTask(cv_user_head).execute(Constant.Url.BASE_URL +head_url);
 //
                                 } else if (msg.equals("1")) {
                                     LogUtils.d(TAG, "上传图片文件失败");

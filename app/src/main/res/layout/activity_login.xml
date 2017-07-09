@@ -14,7 +14,7 @@
         android:id="@+id/image_logo"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
         android:scaleType="center"
         android:src="@drawable/ic_android_black_36dp"/>
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/image_logo"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColorHint="@color/colorHint">
@@ -71,11 +71,14 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="40dp"
         android:text="登录"
-        android:textColor="@color/colorAccent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_login"
+        android:textColor="#333333"
         android:gravity="center"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:layout_below="@id/text_input_layout_passwd"
         android:layout_marginTop="30dp"
         />

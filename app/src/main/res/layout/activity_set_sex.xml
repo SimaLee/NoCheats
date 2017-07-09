@@ -7,8 +7,9 @@ android:background="#FAFAFA">
 <android.support.v7.widget.Toolbar
     android:id="@+id/title"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:background="@color/colorToolBar">
+    android:layout_height="55dp"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimary">
     <TextView
         android:id="@+id/tv_cancel"
         android:layout_width="wrap_content"

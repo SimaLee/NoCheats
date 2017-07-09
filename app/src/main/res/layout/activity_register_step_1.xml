@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <ImageView
         android:id="@+id/image_logo"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_centerHorizontal="true"
         android:scaleType="center"
         android:src="@drawable/ic_android_black_36dp"/>
@@ -18,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/image_logo"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColorHint="@color/colorHint">
@@ -101,14 +103,14 @@
     <TextView
         android:id="@+id/tv_next_step"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="60dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/iv_pcode"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:elevation="1dp"
         android:text="下一步"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textColor="@color/colorBdiduText"
         android:gravity="center"
         android:background="@drawable/bg_label_pink"/>

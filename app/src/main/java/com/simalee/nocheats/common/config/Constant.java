@@ -52,6 +52,7 @@ public class Constant {
         public static final String URL_CHANGE_USER_PASSWORD = BASE_URL+"changePwd.action";
         public static final String URL_EDIT_USER_LOGO = BASE_URL+"editUserLogo.action";
         public static final String URL_UPLOAD_POST_PIC = BASE_URL+"uploadPostPic.action";
+        public static final String URL_CHECK_TIPS = BASE_URL + "checkTips.action";
     }
 
     public class UserInfo{
