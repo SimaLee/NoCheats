@@ -9,13 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.module.data.entity.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
-import com.simalee.nocheats.module.data.entity.topic.TopicCommentEntity;
-import com.simalee.nocheats.module.data.entity.topic.TopicCommentReplyEntity;
-import com.simalee.nocheats.module.experiencesquare.view.PostDetailAdapter;
+import com.simalee.nocheats.module.data.entity.topic.TopicDetailMainFloorConverter;
+import com.simalee.nocheats.module.data.entity.topic.TopicDetailFloorEntity;
 
 import java.util.List;
 
@@ -57,9 +60,9 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeaderViewHolder){
-            ((HeaderViewHolder) holder).bindData((TopicCommentEntity) commentEntityList.get(position));
+            ((HeaderViewHolder) holder).bindData((TopicDetailMainFloorConverter) commentEntityList.get(position));
         }else if (holder instanceof CommentViewHolder){
-            ((CommentViewHolder) holder).bindData((TopicCommentReplyEntity) commentEntityList.get(position));
+            ((CommentViewHolder) holder).bindData((TopicDetailFloorEntity) commentEntityList.get(position));
         }
     }
 
@@ -109,19 +112,28 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             iv_topicPic = (ImageView) rootView.findViewById(R.id.iv_pic);
         }
 
-        public void bindData(TopicCommentEntity data){
+        public void bindData(TopicDetailMainFloorConverter data){
 
             if (data == null){
                 return;
             }
 
             tv_topicTitle.setText(data.getTopicTitle());
-            //image_user
-            tv_userName.setText(data.getUserName());
+
+            Glide.with(mContext)
+                    .load(data.getCommentUserAvatar())
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            image_user.setImageDrawable(glideDrawable);
+                        }
+                    });
+
+            tv_userName.setText(data.getCommentUserName());
             //tv_ishost
-            tv_level.setText(""+IntegralUtils.getLevel(data.getPoint()));
-            tv_topicType.setText(data.getTopicType());
-            tv_topicContent.setText(data.getTopicContent());
+            //tv_level.setText(""+IntegralUtils.getLevel(data.getCommentUserPoint()));//没有返回
+            // tv_topicType.setText();
+            tv_topicContent.setText(data.getCommentContent());
 
         }
     }
@@ -160,7 +172,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         }
 
-        public void bindData(TopicCommentReplyEntity data) {
+        public void bindData(TopicDetailFloorEntity data) {
             //image_user;
             tv_userName.setText(data.getCommentUserName());
 
@@ -170,7 +182,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 tv_isHost.setVisibility(View.GONE);
             }
             //TODO 计算方法
-            tv_level.setText(""+IntegralUtils.getLevel(data.getCommentUserPoint()));
+            //tv_level.setText(""+IntegralUtils.getLevel(data.getCommentUserPoint()));//没有返回
             tv_topicStorey.setText("第" + data.getCommentStorey() + "楼");
             tv_topicComment.setText(data.getCommentContent());
 
@@ -209,5 +221,36 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 });
             }
         }
+    }
+
+    /**
+     * 替换数据
+     * @param data
+     */
+    public void replaceData(List<ICommentEntity> data){
+        commentEntityList.clear();
+        commentEntityList.addAll(data);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 附加数据
+     * @param moreData
+     */
+    public void appendData(List<ICommentEntity> moreData){
+        commentEntityList.addAll(moreData);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 此处需要处理没有回复的问题
+     * @return
+     */
+    public ICommentEntity getLastEntity(){
+        if (commentEntityList == null){
+            throw new NullPointerException("Attend to get last entity in an empty object");
+
+        }
+        return  commentEntityList.get(commentEntityList.size()-1);
     }
 }

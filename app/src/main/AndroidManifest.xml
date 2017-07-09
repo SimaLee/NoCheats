@@ -53,13 +53,14 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".module.experiencesquare.view.NewPostActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".module.experiencesquare.view.ReplyDetailActivity"
-            android:theme="@style/DialogStyle"/>
+        <activity android:name=".module.experiencesquare.view.ReplyDetailActivity"/>
 
         <!-- experience module end -->
 
         <!-- topic module start -->
         <activity android:name=".module.topicsquare.view.TopicDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".module.topicsquare.view.NewTopicActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- topic module end -->

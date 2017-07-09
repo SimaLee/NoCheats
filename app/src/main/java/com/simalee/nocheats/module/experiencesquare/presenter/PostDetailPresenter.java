@@ -1,5 +1,6 @@
 package com.simalee.nocheats.module.experiencesquare.presenter;
 
+import com.simalee.nocheats.common.util.DateUtils;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.ICommentEntity;
 import com.simalee.nocheats.module.data.model.IPostModel;
@@ -60,6 +61,13 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
 
     @Override
     public void loadMoreComments(String postId, String postTime) {
+        if (mPostDetailView != null){
+            mPostDetailView.showLoadingMoreProgress();
+        }
+
+        LogUtils.d(TAG,"before : "+ postTime);
+        postTime = formatTimeString(postTime);
+        LogUtils.d(TAG,"after : "+ postTime);
 
         mPostModel.loadPostDetail(postId, postTime, new IPostModel.LoadPostDetailCallback() {
             @Override
@@ -83,6 +91,7 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
             @Override
             public void onLoadPostDetailFailure() {
                 if (mPostDetailView != null){
+                    mPostDetailView.hideLoadingMoreProgress();
                     mPostDetailView.showLoadMoreCommentsFailure();
                 }
             }
@@ -116,5 +125,14 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
     @Override
     public void start() {
         //do nothing
+    }
+
+    /**
+     * 为了后台访问做的处理
+     * @param timeStr
+     * @return
+     */
+    private String formatTimeString(String timeStr){
+        return DateUtils.plusOneSecond(timeStr);
     }
 }

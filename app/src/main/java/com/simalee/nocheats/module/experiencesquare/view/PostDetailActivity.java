@@ -102,6 +102,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
 
         rl_comment = (RelativeLayout) findViewById(R.id.rl_comment);
         rl_comment.setAlpha(0.8F);
+
         et_comment = (EditText) findViewById(R.id.et_comment);
         ib_send = (ImageView) findViewById(R.id.ib_send);
 
@@ -324,12 +325,12 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     public void showCommentSuccess() {
         et_comment.setText("");
         rl_comment.setAlpha(0.02F);
-        Toast.makeText(getApplicationContext(),"发表评论成功!",Toast.LENGTH_SHORT).show();
+        shortToast("发表评论成功！");
     }
 
     @Override
     public void showCommentFailure() {
-        Toast.makeText(getApplicationContext(),"发表评论失败!",Toast.LENGTH_SHORT).show();
+        shortToast("发表评论失败！");
     }
 
     @Override

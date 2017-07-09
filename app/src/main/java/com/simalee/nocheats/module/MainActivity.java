@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -155,8 +156,8 @@ public class MainActivity extends BaseActivity
 
                         @Override
                         public void onResponse(String response, int id) {
-//                            LogUtils.d(TAG, "user_info: " + response);
-                            Log.i(TAG, response);
+                            LogUtils.d(TAG, "user_info: " + response);
+                            //Log.i(TAG, response);
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 String msg = jsonObject.getString("msg");

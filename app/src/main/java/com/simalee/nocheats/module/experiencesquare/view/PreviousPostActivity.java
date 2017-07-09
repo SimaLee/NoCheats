@@ -41,7 +41,6 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
     private PostAdapter mPostAdapter;
 
     private TextView tv_back;
-
     private PreviousPostPresenter mPreviousPostPresenter;
 
     String userId;

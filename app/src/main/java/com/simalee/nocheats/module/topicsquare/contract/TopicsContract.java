@@ -29,12 +29,25 @@ public interface TopicsContract {
 
         void showTopicDetail(String topicId,String topicTime,String topicTitle);
 
+        boolean isActive();
+    }
+
+    interface NewTopicView extends BaseView<Presenter>{
+        void showLoadingProgress();
+        void hideLoadingProgress();
+
+        void showPostReleasedSuccess();
+        void showPostReleasedFailed(String reason);
+
     }
 
     interface Presenter extends BasePresenter{
+
         void loadTopics();
         void loadMoreTopics(String lastTimeStr);
 
         void openTopicDetail(TopicEntity topicEntity);
+
+        void releaseTopic(String userId,String topicTitle,String topicContent,String topicPicUrls);
     }
 }

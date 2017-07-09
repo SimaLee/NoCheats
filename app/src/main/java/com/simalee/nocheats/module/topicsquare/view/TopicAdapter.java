@@ -1,12 +1,18 @@
 package com.simalee.nocheats.module.topicsquare.view;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
+import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.topic.TopicEntity;
 
@@ -20,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder> {
 
-
+    private Context mContext;
     private List<TopicEntity> topicEntityList;
 
     private OnRecyclerItemClickListener recyclerItemClickListener;
@@ -29,11 +35,12 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
-    public TopicAdapter(List<TopicEntity> topicEntities){
+    public TopicAdapter(Context context,List<TopicEntity> topicEntities){
         if (topicEntities == null){
             throw new NullPointerException("Topic Entities can not be null");
         }
         topicEntityList = topicEntities;
+        mContext = context;
     }
 
 
@@ -83,9 +90,17 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
 
         public void bindData(TopicEntity data){
 
-            //image_user
+            Glide.with(mContext)
+                    .load(data.getAvatar())
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            image_user.setImageDrawable(glideDrawable);
+                        }
+                    });
+
             tv_userName.setText(data.getUserName());
-            tv_userLevel.setText(data.getPoint()+"");
+            tv_userLevel.setText(IntegralUtils.getLevel(data.getPoint()) + "");
             tv_topicType.setText(data.getTopicType());
             tv_topicTitle.setText(data.getTopicTitle());
             tv_topicContent.setText(data.getTopicContent());

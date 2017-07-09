@@ -90,6 +90,14 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mTopicPresenter != null ){
+            mTopicPresenter.loadTopics();
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mContext = null;
@@ -102,7 +110,8 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
         //TODO 使用 presenter 获取数据填充.
 
-        mTopicAdapter = new TopicAdapter(testData());
+        mTopicAdapter = new TopicAdapter(mContext,new ArrayList<TopicEntity>(0));
+
         mTopicAdapter.setRecyclerItemClickListener(new TopicAdapter.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(int position, TopicEntity topicEntity) {
@@ -144,7 +153,7 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
             public void onLoadMore(final TwinklingRefreshLayout refreshLayout) {
                 TopicEntity lastTopic = mTopicAdapter.getLastEntity();
                 if (mTopicPresenter != null){
-                    //mTopicPresenter.loadMoreTopics();
+                    mTopicPresenter.loadMoreTopics(lastTopic.getTopicTime());
                 }
             }
 
@@ -155,13 +164,10 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
 
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                refreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.finishRefreshing();
-                    }
-                },2000);
-                LogUtils.d(TAG,"下拉刷新");
+
+                if (mTopicPresenter != null){
+                    mTopicPresenter.loadTopics();
+                }
             }
 
             @Override
@@ -192,7 +198,8 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
 
     @Override
     public void onFloatingActionButtonClick(View view) {
-        showToastShort("发起新主题！");
+        Intent intent = new Intent(mContext,NewTopicActivity.class);
+        startActivity(intent);
     }
 
     private void showToastShort(String msg){
@@ -247,6 +254,11 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
         intent.putExtra("topicTime",topicTime);
         intent.putExtra("topicTitle",topicTitle);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean isActive() {
+        return isAdded();
     }
 
     @Override

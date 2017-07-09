@@ -3,6 +3,7 @@ package com.simalee.nocheats.module.data.model;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.simalee.nocheats.common.config.Constant;
+import com.simalee.nocheats.common.util.DateUtils;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.AllPostsGson;
@@ -202,7 +203,6 @@ public class PostModel implements IPostModel{
         if (callback == null){
             return;
         }
-
         OkHttpUtils.post()
                 .url(Constant.Url.URL_GET_POST_DETAIL)
                 .addParams("id",postId)
@@ -275,4 +275,5 @@ public class PostModel implements IPostModel{
                 });
 
     }
+
 }

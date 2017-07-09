@@ -132,7 +132,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             tv_userName.setText(data.getCommentUserName());
             //tv_isHost 不用设置
-            tv_level.setText(data.getCommentUserPoint());
+            //tv_level.setText(data.getCommentUserPoint()); 没有返回
             //tv_postType.setText();
             tv_postContent.setText(data.getCommentContent());
         }
@@ -184,7 +184,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 tv_isHost.setVisibility(View.GONE);
             }
             //TODO 计算方法
-            tv_level.setText(data.getCommentUserPoint());
+            //tv_level.setText(data.getCommentUserPoint());//没有返回
             tv_postStorey.setText("第"+data.getCommentStorey()+"楼");
             tv_postComment.setText(data.getCommentContent());
 

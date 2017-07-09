@@ -31,6 +31,17 @@ public class Constant {
         //评论
         public static final String URL_RELEASE_COMMENT = BASE_URL + "comment.action";
 
+        //加载主题
+        public static final String URL_LOAD_TOPIC = BASE_URL + "checkThemeList.action";
+        //发起讨论主题
+        public static final String URL_RELEASE_TOPIC = BASE_URL + "pubTheme.action";
+
+        //获取主题的详情
+        public static final String URL_GET_TOPIC_DETAIL = BASE_URL + "checkTheme.action";
+
+        //查看我的主题
+        public static final String URL_LOAD_MY_TOPIC = BASE_URL + "checkMyTheme.action";
+
         //-----------------------------------------------------------
         public static final String URL_GET_USER_INFORMATION = BASE_URL +"checkUserInf.action";
         public static final String URL_EDIT_USER_NAME = BASE_URL+"editUserName.action";
