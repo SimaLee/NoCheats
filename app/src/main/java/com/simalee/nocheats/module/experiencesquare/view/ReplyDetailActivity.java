@@ -63,10 +63,6 @@ public class ReplyDetailActivity extends Activity implements ReplyDetailContract
      */
     String floorId = "";
 
-    /**
-     * 没有点击Item的时候默认回复当前楼层
-     */
-    String commentId = "";
 
     /**
      * 当前用户的id
@@ -98,9 +94,7 @@ public class ReplyDetailActivity extends Activity implements ReplyDetailContract
         setContentView(R.layout.activity_reply_detail);
 
         floorId = getIntent().getStringExtra("floorId");
-        commentId = getIntent().getStringExtra("commentId");
         LogUtils.d(TAG,"get floorId: " + floorId);
-        LogUtils.d(TAG,"get commentId: " + commentId);
 
         userId = PreferenceUtil.getString(this,PreferenceUtil.USER_ID);
 

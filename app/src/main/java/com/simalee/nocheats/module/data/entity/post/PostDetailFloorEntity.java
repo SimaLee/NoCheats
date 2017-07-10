@@ -129,13 +129,13 @@ public class PostDetailFloorEntity implements ICommentEntity,Serializable,Compar
     /**
      * 评论的帖子的Id
      */
-    @SerializedName("id")
+    @SerializedName("f_id")
     String postId;
 
     /**
      * 评论的Id
      */
-    @SerializedName("f_id")
+    @SerializedName("id")
     String commentId;
     /**
      * 发出评论的用户的Id

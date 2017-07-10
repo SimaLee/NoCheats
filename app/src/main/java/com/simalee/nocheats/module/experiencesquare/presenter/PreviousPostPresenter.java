@@ -71,7 +71,7 @@ public class PreviousPostPresenter implements PreviousPostContract.Presenter {
 
     @Override
     public void loadMoreMyPosts(String userId, int postType, String lastTimeStr) {
-        //TODO
+
         if (mPreviousPostView != null){
             mPreviousPostView.showLoadingMoreProgress();
 

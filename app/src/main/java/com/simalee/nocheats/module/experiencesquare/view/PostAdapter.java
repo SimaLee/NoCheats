@@ -91,7 +91,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         }
 
         public void bindData(PostEntity postEntity){
-            //TODO 访问网络数据
+
             Glide.with(mContext)
                     .load(postEntity.getAvatar())
                     .into(new SimpleTarget<GlideDrawable>() {

@@ -343,14 +343,14 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     }
 
     @Override
-    public void onMoreReplyClick(String floorId,String commentId) {
+    public void onMoreReplyClick(String floorId) {
 
         LogUtils.d(TAG,"current floor id : "+ floorId);
-        LogUtils.d(TAG,"current comment id : "+ commentId);
+       // LogUtils.d(TAG,"current comment id : "+ commentId);
         Intent intent = new Intent(this,ReplyDetailActivity.class);
 
         intent.putExtra("floorId",floorId);
-        intent.putExtra("commentId",commentId);
+       // intent.putExtra("commentId",commentId);
         startActivity(intent);
 
     }

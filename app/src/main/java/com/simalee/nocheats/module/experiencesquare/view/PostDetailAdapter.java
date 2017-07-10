@@ -193,7 +193,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_postStorey.setText("第"+data.getCommentStorey()+"楼");
             tv_postComment.setText(data.getCommentContent());
 
-            setCommentReply(data.getPostId(),data.getCommentId(),data.getRepliesList());
+            setCommentReply(data.getCommentId(),data.getRepliesList());
 
             tv_operation_type.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -202,13 +202,13 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     LogUtils.d(TAG,"点击了："+data.toString());
                     if(mOnCommentClickListener != null){
                         //TODO :这里错了 ID
-                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getPostId());
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
                     }
                 }
             });
         }
 
-        private void setCommentReply(final String floorId,final String commentId,final List<ReplyReplyEntity> replyList){
+        private void setCommentReply(final String floorId,final List<ReplyReplyEntity> replyList){
             if (replyList == null || replyList.size() == 0){
                 setNoReplyView();
                 return;
@@ -255,7 +255,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                     public void onClick(View v) {
                         if (onMoreReplyClickListener != null){
                             Toast.makeText(mContext,"查看更多回复",Toast.LENGTH_SHORT).show();
-                            onMoreReplyClickListener.onMoreReplyClick(floorId,commentId);
+                            onMoreReplyClickListener.onMoreReplyClick(floorId);
                         }
 
                     }
@@ -309,7 +309,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
     public interface OnMoreReplyClickListener{
-        void onMoreReplyClick(String floorId,String commentId);
+        void onMoreReplyClick(String floorId);
     }
 
     public void setOnMoreReplyClickListener(OnMoreReplyClickListener listener) {

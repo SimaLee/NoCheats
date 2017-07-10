@@ -190,7 +190,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_topicStorey.setText("第" + data.getCommentStorey() + "楼");
             tv_topicComment.setText(data.getCommentContent());
 
-            setCommentReply(data.getTopicId(),data.getCommentId(),data.getRepliesList());
+            setCommentReply(data.getCommentId(),data.getRepliesList());
 
             tv_operation_type.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -199,7 +199,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     LogUtils.d(TAG,"点击了："+data.toString());
                     if(mOnCommentClickListener != null){
                         //TODO :这里错了 ID
-                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getTopicId());
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
                     }
                 }
             });
@@ -207,7 +207,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         }
 
-        private void setCommentReply(final String floorId,final String commentId,List<ReplyReplyEntity> replyList) {
+        private void setCommentReply(final String floorId,List<ReplyReplyEntity> replyList) {
             if (replyList == null || replyList.size() == 0) {
                 setNoReplyView();
                 return;
@@ -242,7 +242,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     public void onClick(View v) {
                         Toast.makeText(mContext, "查看更多回复", Toast.LENGTH_SHORT).show();
                         if (mOnMoreReplyClickListener != null){
-                            mOnMoreReplyClickListener.onMoreReplyClick(floorId,commentId);
+                            mOnMoreReplyClickListener.onMoreReplyClick(floorId);
                         }
                     }
                 });
@@ -291,7 +291,7 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface OnMoreReplyClickListener{
-        void onMoreReplyClick(String floorId,String commentId);
+        void onMoreReplyClick(String floorId);
     }
 
     public void setOnMoreReplyClickListener(OnMoreReplyClickListener listener) {
