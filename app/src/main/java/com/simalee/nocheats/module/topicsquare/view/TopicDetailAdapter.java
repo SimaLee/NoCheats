@@ -14,9 +14,10 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
-import com.simalee.nocheats.common.util.IntegralUtils;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
-import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
+import com.simalee.nocheats.common.util.LogUtils;
+import com.simalee.nocheats.common.util.SpannableStringUtils;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ReplyReplyEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicDetailMainFloorConverter;
 import com.simalee.nocheats.module.data.entity.topic.TopicDetailFloorEntity;
 
@@ -153,6 +154,8 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         TextView tv_secondReply;
         TextView tv_moreReply;
 
+        TextView tv_operation_type;
+
         public CommentViewHolder(View itemView) {
             super(itemView);
             initViews(itemView);
@@ -170,9 +173,10 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_secondReply = (TextView) rootView.findViewById(R.id.tv_second_reply);
             tv_moreReply = (TextView) rootView.findViewById(R.id.tv_more_replies);
 
+            tv_operation_type = (TextView) rootView.findViewById(R.id.tv_operation_type);
         }
 
-        public void bindData(TopicDetailFloorEntity data) {
+        public void bindData(final TopicDetailFloorEntity data) {
             //image_user;
             tv_userName.setText(data.getCommentUserName());
 
@@ -186,40 +190,72 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_topicStorey.setText("第" + data.getCommentStorey() + "楼");
             tv_topicComment.setText(data.getCommentContent());
 
-            setCommentReply(data.getRepliesList());
+            setCommentReply(data.getTopicId(),data.getCommentId(),data.getRepliesList());
+
+            tv_operation_type.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //data.getCommentId()
+                    LogUtils.d(TAG,"点击了："+data.toString());
+                    if(mOnCommentClickListener != null){
+                        //TODO :这里错了 ID
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getTopicId());
+                    }
+                }
+            });
+
+
         }
 
-        private void setCommentReply(List<ReplyReplyEntity> replyList) {
+        private void setCommentReply(final String floorId,final String commentId,List<ReplyReplyEntity> replyList) {
             if (replyList == null || replyList.size() == 0) {
+                setNoReplyView();
                 return;
             }
             if (replyList.size() == 1) {
-                tv_firstReply.setText(replyList.get(0).toString());
                 tv_firstReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setVisibility(View.GONE);
                 tv_moreReply.setVisibility(View.GONE);
 
+                tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
+
             } else if (replyList.size() == 2) {
-                tv_firstReply.setText(replyList.get(0).toString());
                 tv_firstReply.setVisibility(View.VISIBLE);
-                tv_secondReply.setText(replyList.get(1).toString());
+                tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
+
                 tv_secondReply.setVisibility(View.VISIBLE);
+                tv_secondReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(1)));
+
                 tv_moreReply.setVisibility(View.GONE);
             } else {
-                tv_firstReply.setText(replyList.get(0).toString());
                 tv_firstReply.setVisibility(View.VISIBLE);
-                tv_secondReply.setText(replyList.get(1).toString());
+                tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
+
                 tv_secondReply.setVisibility(View.VISIBLE);
-                tv_moreReply.setText("更多" + (replyList.size() - 2) + "条回复");
+                tv_secondReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(1)));
+
                 tv_moreReply.setVisibility(View.VISIBLE);
+                tv_moreReply.setText("更多" + (replyList.size() - 2) + "条回复");
 
                 tv_moreReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(mContext, "查看更多回复", Toast.LENGTH_SHORT).show();
+                        if (mOnMoreReplyClickListener != null){
+                            mOnMoreReplyClickListener.onMoreReplyClick(floorId,commentId);
+                        }
                     }
                 });
             }
+        }
+
+        /**
+         * 设置没有评论时的状态。
+         */
+        private void setNoReplyView(){
+            tv_firstReply.setVisibility(View.GONE);
+            tv_secondReply.setVisibility(View.GONE);
+            tv_moreReply.setVisibility(View.GONE);
         }
     }
 
@@ -253,4 +289,24 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
         return  commentEntityList.get(commentEntityList.size()-1);
     }
+
+    public interface OnMoreReplyClickListener{
+        void onMoreReplyClick(String floorId,String commentId);
+    }
+
+    public void setOnMoreReplyClickListener(OnMoreReplyClickListener listener) {
+        mOnMoreReplyClickListener = listener;
+    }
+
+    public interface OnCommentClickListener{
+        void onCommentClick(View v,String userName,String floorId);
+    }
+
+    public void setOnCommentClickListener(OnCommentClickListener mOnCommentClickListener) {
+        this.mOnCommentClickListener = mOnCommentClickListener;
+    }
+
+    private OnMoreReplyClickListener mOnMoreReplyClickListener;
+    private OnCommentClickListener mOnCommentClickListener;
+
 }

@@ -15,11 +15,12 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
+import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.SpannableStringUtils;
 import com.simalee.nocheats.module.data.entity.post.PostDetailFloorEntity;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.PostDetailMainFloorConverter;
-import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
+import com.simalee.nocheats.module.data.entity.comment.ReplyReplyEntity;
 
 import java.util.List;
 
@@ -154,6 +155,8 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         TextView tv_secondReply;
         TextView tv_moreReply;
 
+        TextView tv_operation_type;
+
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -172,9 +175,11 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_secondReply = (TextView) rootView.findViewById(R.id.tv_second_reply);
             tv_moreReply = (TextView) rootView.findViewById(R.id.tv_more_replies);
 
+            tv_operation_type = (TextView) rootView.findViewById(R.id.tv_operation_type);
+
         }
 
-        public void bindData(PostDetailFloorEntity data){
+        public void bindData(final PostDetailFloorEntity data){
             //image_user;
             tv_userName.setText(data.getCommentUserName());
 
@@ -188,55 +193,69 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_postStorey.setText("第"+data.getCommentStorey()+"楼");
             tv_postComment.setText(data.getCommentContent());
 
-            setCommentReply(data.getRepliesList());
+            setCommentReply(data.getPostId(),data.getCommentId(),data.getRepliesList());
+
+            tv_operation_type.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //data.getCommentId()
+                    LogUtils.d(TAG,"点击了："+data.toString());
+                    if(mOnCommentClickListener != null){
+                        //TODO :这里错了 ID
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getPostId());
+                    }
+                }
+            });
         }
 
-        private void setCommentReply(final List<ReplyReplyEntity> replyList){
-            if (replyList   == null || replyList.size() == 0){
-
+        private void setCommentReply(final String floorId,final String commentId,final List<ReplyReplyEntity> replyList){
+            if (replyList == null || replyList.size() == 0){
                 setNoReplyView();
-
                 return;
             }
             if (replyList.size() == 1){
-                tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
-                tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
 
                 tv_firstReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setVisibility(View.GONE);
                 tv_moreReply.setVisibility(View.GONE);
 
-            }else if (replyList.size() == 2){
-
                 tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
                 tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
+
+            }else if (replyList.size() == 2){
+
                 tv_firstReply.setVisibility(View.VISIBLE);
+                tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
+                tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
 
                 //必须要设置 setMovementMethod 才能响应点击事件
+                tv_secondReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(1)));
                 tv_secondReply.setMovementMethod(LinkMovementMethod.getInstance());
-                tv_secondReply.setVisibility(View.VISIBLE);
+
 
                 tv_moreReply.setVisibility(View.GONE);
             }else{
                // tv_firstReply.setText(replyList.get(0).getTestMsg());
+                tv_firstReply.setVisibility(View.VISIBLE);
                 tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
                 tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
-                tv_firstReply.setVisibility(View.VISIBLE);
 
+
+                tv_secondReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(1)));
                 tv_secondReply.setMovementMethod(LinkMovementMethod.getInstance());
-                tv_secondReply.setVisibility(View.VISIBLE);
 
-                tv_moreReply.setText("更多"+(replyList.size()-2)+"条回复");
                 tv_moreReply.setVisibility(View.VISIBLE);
+                tv_moreReply.setText("更多"+(replyList.size()-2)+"条回复");
+
 
                 tv_moreReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onMoreReplyClickListener != null){
                             Toast.makeText(mContext,"查看更多回复",Toast.LENGTH_SHORT).show();
-                            onMoreReplyClickListener.onMoreReplyClick(v,replyList);
+                            onMoreReplyClickListener.onMoreReplyClick(floorId,commentId);
                         }
 
                     }
@@ -255,15 +274,6 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     }
 
-    public interface OnMoreReplyClickListener{
-        void onMoreReplyClick(View v,List<ReplyReplyEntity> replyReplyEntities);
-    }
-
-    private OnMoreReplyClickListener onMoreReplyClickListener;
-
-    public void setOnMoreReplyClickListener(OnMoreReplyClickListener listener) {
-        onMoreReplyClickListener = listener;
-    }
 
     /**
      * 替换数据
@@ -295,5 +305,27 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
         return  commentEntityList.get(commentEntityList.size()-1);
     }
+
+
+
+    public interface OnMoreReplyClickListener{
+        void onMoreReplyClick(String floorId,String commentId);
+    }
+
+    public void setOnMoreReplyClickListener(OnMoreReplyClickListener listener) {
+        onMoreReplyClickListener = listener;
+    }
+
+    public interface OnCommentClickListener{
+        void onCommentClick(View v,String userName,String floorId);
+    }
+
+    public void setOnCommentClickListener(OnCommentClickListener mOnCommentClickListener) {
+        this.mOnCommentClickListener = mOnCommentClickListener;
+    }
+
+    private OnMoreReplyClickListener onMoreReplyClickListener;
+    private OnCommentClickListener mOnCommentClickListener;
+
 
 }

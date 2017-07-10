@@ -19,6 +19,7 @@ import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.base.Response;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.PreferenceUtil;
+import com.simalee.nocheats.common.util.TakePhotoPickPhotoUtils;
 import com.simalee.nocheats.module.experiencesquare.contract.PostsContract;
 import com.simalee.nocheats.module.experiencesquare.presenter.PostsPresenter;
 
@@ -72,7 +73,7 @@ public class NewPostActivity extends BaseActivity implements PostsContract.NewPo
      */
     int selectPostType = 1;
 
-
+    private TakePhotoPickPhotoUtils mTakePhotoPickPhotoUtils;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +82,8 @@ public class NewPostActivity extends BaseActivity implements PostsContract.NewPo
 
         // 注：-1 无意义
         mPostPresenter = new PostsPresenter(this,-1);
+
+        mTakePhotoPickPhotoUtils = new TakePhotoPickPhotoUtils(this,500);
 
         initViews();
     }

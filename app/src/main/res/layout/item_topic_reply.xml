@@ -65,7 +65,7 @@
             android:id="@+id/tv_operation_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="操作"
+            android:text="回复"
             android:textColor="@color/colorCheatType"
             android:textSize="14sp"
             android:layout_alignParentRight="true"

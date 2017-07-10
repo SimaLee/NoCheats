@@ -24,12 +24,19 @@ public class Constant {
         public static final String URL_LOAD_POST = BASE_URL +"checkPostList.action";
         //获取帖子的详情
         public static final String URL_GET_POST_DETAIL = BASE_URL + "checkPost.action";
-
         //查看我的帖子
         public static final String URL_LOAD_MY_POST = BASE_URL + "checkMyPost.action";
-
         //评论
         public static final String URL_RELEASE_COMMENT = BASE_URL + "comment.action";
+        //回复评论
+        public static final String URL_REPLY_COMMENT = BASE_URL + "replyComment.action";
+        //删除评论
+        public static final String URL_DEL_COMMENT = BASE_URL + "delComment.action";
+        //回复评论回复
+        public static final String URL_REPLY_REPLY = BASE_URL + "replyComment.action";
+        //查看全部评论回复
+        public static final String URL_LOAD_ALL_REPLY = BASE_URL + "checkAllReply.action";
+
 
         //加载主题
         public static final String URL_LOAD_TOPIC = BASE_URL + "checkThemeList.action";
@@ -41,6 +48,9 @@ public class Constant {
 
         //查看我的主题
         public static final String URL_LOAD_MY_TOPIC = BASE_URL + "checkMyTheme.action";
+
+        //上传图片
+        public static final String URL_UPLOAD_PIC = BASE_URL + "uploadPostPic.action";
 
         //-----------------------------------------------------------
         public static final String URL_GET_USER_INFORMATION = BASE_URL +"checkUserInf.action";

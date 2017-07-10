@@ -1,9 +1,10 @@
 package com.simalee.nocheats.module.data.entity.post;
 
 import com.google.gson.annotations.SerializedName;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,6 +70,7 @@ public class PostDetailGson {
     public List<ICommentEntity> getFloorsWrapper(){
 
         List<ICommentEntity> floorsWrapper = new ArrayList<>();
+        Collections.sort(floors);
         floorsWrapper.addAll(floors);
 
         return floorsWrapper;

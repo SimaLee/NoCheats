@@ -2,7 +2,9 @@ package com.simalee.nocheats.module.experiencesquare.presenter;
 
 import com.simalee.nocheats.common.util.DateUtils;
 import com.simalee.nocheats.common.util.LogUtils;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
+import com.simalee.nocheats.module.data.model.CommentModel;
+import com.simalee.nocheats.module.data.model.ICommentModel;
 import com.simalee.nocheats.module.data.model.IPostModel;
 import com.simalee.nocheats.module.data.model.PostModel;
 import com.simalee.nocheats.module.experiencesquare.contract.PostDetailContract;
@@ -19,6 +21,7 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
 
     private PostDetailContract.PostDetailView mPostDetailView;
     private IPostModel mPostModel;
+    private ICommentModel mCommentModel;
 
 
     public PostDetailPresenter(PostDetailContract.PostDetailView postDetailView){
@@ -29,8 +32,14 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         mPostDetailView = postDetailView;
 
         mPostModel = new PostModel();
+        mCommentModel = new CommentModel();
     }
 
+    /**
+     * 加载帖子详情
+     * @param postId
+     * @param postTime
+     */
     @Override
     public void loadPostDetail(String postId, String postTime) {
 
@@ -39,6 +48,7 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
             public void onError(Exception e) {
                 LogUtils.e(TAG,"error: " + e.toString());
                 if (mPostDetailView != null){
+                    mPostDetailView.hideLoadingProgress();
                     mPostDetailView.showLoadPostDetailFailure();
                 }
             }
@@ -46,6 +56,7 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
             @Override
             public void onLoadPostDetailSuccess(List<ICommentEntity> postDetail) {
                 if (mPostDetailView != null){
+                    mPostDetailView.hideLoadingProgress();
                     mPostDetailView.showPostDetail(postDetail);
                 }
             }
@@ -53,12 +64,18 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
             @Override
             public void onLoadPostDetailFailure() {
                 if (mPostDetailView!=null){
+                    mPostDetailView.hideLoadingProgress();
                     mPostDetailView.showLoadPostDetailFailure();
                 }
             }
         });
     }
 
+    /**
+     * 加载更多数据
+     * @param postId
+     * @param postTime
+     */
     @Override
     public void loadMoreComments(String postId, String postTime) {
         if (mPostDetailView != null){
@@ -98,9 +115,16 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
         });
     }
 
+    /**
+     * 发表评论
+     * @param userId
+     * @param floorId
+     * @param content
+     * @param photoUrls
+     */
     @Override
     public void releaseComment(String userId, String floorId, String content, String photoUrls) {
-        mPostModel.releaseComment(userId, floorId, content, photoUrls, new IPostModel.ReleaseCommentCallback() {
+        mCommentModel.releaseComment(userId, floorId, content, photoUrls, new ICommentModel.ReleaseCommentCallback() {
             @Override
             public void onError(Exception e) {
                 LogUtils.e(TAG,"error: "+e.toString());
@@ -117,6 +141,37 @@ public class PostDetailPresenter implements PostDetailContract.Presenter {
             public void onReleaseFailure() {
                 if (mPostDetailView!=null){
                     mPostDetailView.showLoadMoreCommentsFailure();
+                }
+            }
+        });
+    }
+
+    /**
+     * 回复评论 楼中楼开始
+     * @param floorId
+     * @param userId
+     * @param content
+     */
+    @Override
+    public void replyComment(String floorId, String userId, String content) {
+
+        mCommentModel.replyComment(floorId, userId, content, new ICommentModel.ReleaseCommentCallback() {
+            @Override
+            public void onError(Exception e) {
+                LogUtils.e(TAG,"error: " + e.toString());
+            }
+
+            @Override
+            public void onReleaseSuccess() {
+                if (mPostDetailView != null){
+                    mPostDetailView.showCommentSuccess();
+                }
+            }
+
+            @Override
+            public void onReleaseFailure() {
+                if (mPostDetailView != null){
+                    mPostDetailView.showCommentFailure();
                 }
             }
         });

@@ -7,10 +7,9 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 
-import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
+import com.simalee.nocheats.module.data.entity.comment.ReplyReplyEntity;
 
 /**
  * Created by Lee Sima on 2017/6/27.
@@ -48,7 +47,7 @@ public class SpannableStringUtils {
             resBuilder.append(isHost);
         }
 
-        if (entity.getObjectName() != null || !("null".equals(entity.getObjectName()))){
+        if (entity.getObjectName() != null && !("null".equals(entity.getObjectName()))){
             // 回复 某某某 :
             SpannableString replyToObjectName = new SpannableString(" 回复 "+ entity.getObjectName()+" :");
             resBuilder.append(replyToObjectName);

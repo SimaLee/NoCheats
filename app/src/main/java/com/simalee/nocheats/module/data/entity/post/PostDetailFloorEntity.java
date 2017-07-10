@@ -1,8 +1,8 @@
 package com.simalee.nocheats.module.data.entity.post;
 
 import com.google.gson.annotations.SerializedName;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
-import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ReplyReplyEntity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Lee Sima on 2017/6/21.
  */
 
-public class PostDetailFloorEntity implements ICommentEntity,Serializable {
+public class PostDetailFloorEntity implements ICommentEntity,Serializable,Comparable<PostDetailFloorEntity> {
 
     private static final long serialVersionUID = 10002L;
 
@@ -199,4 +199,8 @@ public class PostDetailFloorEntity implements ICommentEntity,Serializable {
     @SerializedName("reply")
      List<ReplyReplyEntity> repliesList;
 
+    @Override
+    public int compareTo(PostDetailFloorEntity o) {
+        return this.getCommentStorey() - o.getCommentStorey();
+    }
 }

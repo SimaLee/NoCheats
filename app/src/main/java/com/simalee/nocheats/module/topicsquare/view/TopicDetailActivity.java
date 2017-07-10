@@ -1,15 +1,18 @@
 package com.simalee.nocheats.module.topicsquare.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,10 +28,12 @@ import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.PreferenceUtil;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicDetailFloorEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicDetailMainFloorConverter;
 import com.simalee.nocheats.module.experiencesquare.view.DividerItemDecoration;
+import com.simalee.nocheats.module.experiencesquare.view.PostDetailAdapter;
+import com.simalee.nocheats.module.experiencesquare.view.ReplyDetailActivity;
 import com.simalee.nocheats.module.topicsquare.contract.TopicDetailContract;
 import com.simalee.nocheats.module.topicsquare.presenter.TopicDetailPresenter;
 
@@ -39,7 +44,8 @@ import java.util.List;
  * Created by Lee Sima on 2017/6/22.
  */
 
-public class TopicDetailActivity extends BaseActivity implements TopicDetailContract.TopicDetailView{
+public class TopicDetailActivity extends BaseActivity implements TopicDetailContract.TopicDetailView,
+        TopicDetailAdapter.OnMoreReplyClickListener,TopicDetailAdapter.OnCommentClickListener{
 
     private static final String TAG = TopicDetailActivity.class.getSimpleName();
 
@@ -57,6 +63,8 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
 
     private TopicDetailContract.Presenter mTopicDetailPresenter;
 
+    String userId;
+
     String topicId;
     String topicTime;
     String topicTitle;
@@ -65,6 +73,20 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
      *  用于响应下方的发表评论的功能
      */
     String mainFloorId;
+
+    /**
+     * 选择回复的楼层id
+     */
+    String selectReplyFloorId;
+
+    /**
+     *  回复楼主还是回复楼层
+     */
+    private static final int MODE_REPLY_HOST = 0;
+    private static final int MODE_REPLY_FLOOR = 1;
+
+    private int replyMode = MODE_REPLY_HOST;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +99,13 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
 
         LogUtils.d(TAG,topicTitle);
 
+        userId = PreferenceUtil.getString(this,PreferenceUtil.USER_ID);
+
         mTopicDetailPresenter = new TopicDetailPresenter(this);
+
+        //键盘不自动弹出
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         initViews();
 
     }
@@ -88,7 +116,7 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
         mRefreshLayout = (TwinklingRefreshLayout) findViewById(R.id.refresh_layout);
 
         rl_comment = (RelativeLayout) findViewById(R.id.rl_comment);
-       // rl_comment.setAlpha(0.8F);
+
 
         et_comment = (EditText) findViewById(R.id.et_comment);
         ib_send = (ImageView) findViewById(R.id.ib_send);
@@ -103,23 +131,36 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
             }
         });
 
-
-        et_comment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        et_comment.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
-                    rl_comment.setBackgroundColor(getResources().getColor(R.color.white));
-                    rl_comment.setAlpha(1.0F);
-                }else{
-                    rl_comment.setAlpha(0.5F);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() == 0){
+                    hideSoftInput();
+                    et_comment.setHint("说说你的看法吧");
+                    replyMode = MODE_REPLY_HOST;
                 }
             }
         });
+
         ib_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO 发送评论
-                releaseComment();
+                if (replyMode == MODE_REPLY_HOST){
+                    releaseComment();
+                }else if (replyMode == MODE_REPLY_FLOOR){
+                    replyComment();
+                }
 
             }
         });
@@ -142,6 +183,10 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
 
         mTopicDetailAdapter = new TopicDetailAdapter(this,new ArrayList<ICommentEntity>(0));
+
+        mTopicDetailAdapter.setOnCommentClickListener(this);
+        mTopicDetailAdapter.setOnMoreReplyClickListener(this);
+
         mRecyclerView.setAdapter(mTopicDetailAdapter);
     }
 
@@ -156,8 +201,6 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
         headerView.setTextColor(0xff745D5C);
         mSwipeRefreshLayout.setHeaderView(headerView);*/
 
-        // 不用下拉刷新
-        mRefreshLayout.setEnableRefresh(false);
 
         //设置底部刷新view
         LoadingView loadingView = new LoadingView(this);
@@ -200,13 +243,9 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
 
             @Override
             public void onRefresh(final TwinklingRefreshLayout refreshLayout) {
-                refreshLayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshLayout.finishRefreshing();
-                    }
-                },2000);
-                LogUtils.d(TAG,"下拉刷新");
+                if ((mTopicDetailPresenter != null) && (topicId != null) && (topicTime != null)){
+                    mTopicDetailPresenter.loadTopicDetail(topicId,topicTime);
+                }
             }
 
             @Override
@@ -241,13 +280,22 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
     @Override
     public void showCommentSuccess() {
         et_comment.setText("");
-        rl_comment.setAlpha(0.02F);
-        Toast.makeText(getApplicationContext(),"发表评论成功!",Toast.LENGTH_SHORT).show();
+        shortToast("发表评论成功!");
     }
 
     @Override
     public void showCommentFailure() {
+        shortToast("发表评论失败！");
+    }
 
+    @Override
+    public void showLoadingProgress() {
+        mRefreshLayout.startRefresh();
+    }
+
+    @Override
+    public void hideLoadingProgress() {
+        mRefreshLayout.finishRefreshing();
     }
 
     @Override
@@ -263,6 +311,31 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
     @Override
     public void setPresenter(TopicDetailContract.Presenter presenter) {
         //do nothing
+    }
+
+    @Override
+    public void onCommentClick(View v, String userName, String floorId) {
+        LogUtils.d(TAG,"回复： " + userName + " floorId :" + floorId);
+
+        replyMode = MODE_REPLY_FLOOR;
+        selectReplyFloorId = floorId;
+
+        String hintStr = "回复 "+ userName + ":";
+        et_comment.setHint(hintStr);
+        et_comment.requestFocus();
+        showSoftInput();
+    }
+
+    @Override
+    public void onMoreReplyClick(String floorId, String commentId) {
+
+        LogUtils.d(TAG,"current floor id : "+ floorId);
+        LogUtils.d(TAG,"current comment id : "+ commentId);
+        Intent intent = new Intent(this,ReplyDetailActivity.class);
+
+        intent.putExtra("floorId",floorId);
+        intent.putExtra("commentId",commentId);
+        startActivity(intent);
     }
 
    /* private ArrayList<ICommentEntity> testData(){
@@ -356,7 +429,21 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
             mTopicDetailPresenter.releaseComment(userId,mainFloorId,commentStr,photoUrls);
 
         }
+    }
 
+    /**
+     * 回复楼层 楼中楼开始
+     */
+    private void replyComment() {
+        String commentStr = et_comment.getText().toString().trim();
+        if (validatInput(commentStr)){
+            LogUtils.d(TAG,"comment reply floorId is : " + selectReplyFloorId);
+            LogUtils.d(TAG,"comment reply content is :" + commentStr);
+
+            hideSoftInput();
+            mTopicDetailPresenter.replyComment(selectReplyFloorId,userId,commentStr);
+            replyMode = MODE_REPLY_HOST;
+        }
 
     }
 
@@ -392,4 +479,23 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
     private void longToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
+
+
+
+    /**
+     * 隐藏软键盘
+     */
+    private void hideSoftInput(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(et_comment.getWindowToken(),0);
+    }
+
+    /**
+     * 弹出软键盘
+     */
+    private void showSoftInput(){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(et_comment,0);
+    }
+
 }

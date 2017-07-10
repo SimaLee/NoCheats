@@ -32,29 +32,11 @@
 
     </android.support.v7.widget.Toolbar>
 
-
-    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-        android:layout_below="@id/toolbar"
-        android:layout_marginTop="2dp"
-        android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
-
     <RelativeLayout
         android:id="@+id/rl_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="2dp">
+        android:layout_alignParentBottom="true">
 
         <ImageView
             android:id="@+id/ib_add_picture"
@@ -90,5 +72,23 @@
             />
 
     </RelativeLayout>
+
+    <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="2dp"
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_comment">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+
 
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package com.simalee.nocheats.module.data.model;
 
-import com.simalee.nocheats.common.base.Response;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.PostEntity;
 
 import java.util.List;
@@ -39,11 +38,6 @@ public interface IPostModel {
         void onLoadPostDetailFailure();
     }
 
-    interface ReleaseCommentCallback{
-        void onError(Exception e);
-        void onReleaseSuccess();
-        void onReleaseFailure();
-    }
 
     void releasePost(String userId,String postTitle,String postType,
                      String postContent,String postPicUrl,ReleasePostCallback callback);
@@ -54,5 +48,4 @@ public interface IPostModel {
 
     void loadPostDetail(String postId,String lastTimeStr,LoadPostDetailCallback callback);
 
-    void releaseComment(String userId, String floorId, String content, String photoUrls,ReleaseCommentCallback callback);
 }

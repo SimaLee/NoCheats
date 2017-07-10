@@ -1,6 +1,6 @@
 package com.simalee.nocheats.module.data.model;
 
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicEntity;
 
 import java.util.List;
@@ -35,11 +35,6 @@ public interface ITopicModel {
         void onLoadTopicFailure();
     }
 
-    interface ReleaseCommentCallback{
-        void onError(Exception e);
-        void onReleaseSuccess();
-        void onReleaseFailure();
-    }
 
     void loadTopics(String lastTimeStr,LoadTopicsCallback callback);
 
@@ -50,5 +45,4 @@ public interface ITopicModel {
 
     void loadMyTopics(String userId,String lastTimeStr,LoadMyTopicCallback callback);
 
-    void releaseComment(String userId, String floorId, String content, String photoUrls,ReleaseCommentCallback callback);
 }

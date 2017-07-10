@@ -1,11 +1,8 @@
 package com.simalee.nocheats.module.data.model;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.simalee.nocheats.common.config.Constant;
-import com.simalee.nocheats.common.util.DateUtils;
 import com.simalee.nocheats.common.util.LogUtils;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.AllPostsGson;
 import com.simalee.nocheats.module.data.entity.post.MyPostsGson;
 import com.simalee.nocheats.module.data.entity.post.PostDetailGson;
@@ -14,10 +11,6 @@ import com.zhy.http.okhttp.callback.StringCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 import okhttp3.Call;
 
@@ -231,49 +224,5 @@ public class PostModel implements IPostModel{
                 });
     }
 
-    /**
-     * floorId 为楼层的id
-     * @param userId
-     * @param floorId
-     * @param content
-     * @param photoUrls
-     * @param callback
-     */
-    @Override
-    public void releaseComment(String userId, String floorId, String content, String photoUrls, final ReleaseCommentCallback callback) {
-        if (callback == null){
-            return;
-        }
-        OkHttpUtils.post()
-                .url(Constant.Url.URL_RELEASE_COMMENT)
-                .addParams("u_id",userId)
-                .addParams("f_id",floorId)
-                .addParams("content",content)
-                .addParams("pic",photoUrls)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        callback.onError(e);
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        LogUtils.d(TAG,"onResponse : "+ response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String msg = jsonObject.getString("msg");
-                            if ("0".equals(msg)){
-                                callback.onReleaseSuccess();
-                            }else{
-                                callback.onReleaseFailure();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-    }
 
 }

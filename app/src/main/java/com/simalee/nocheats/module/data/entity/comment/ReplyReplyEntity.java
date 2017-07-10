@@ -1,4 +1,4 @@
-package com.simalee.nocheats.module.data.entity;
+package com.simalee.nocheats.module.data.entity.comment;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -44,6 +44,12 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
     @SerializedName("r_name")
     String objectName;
 
+
+    /**
+     * 被回复人id
+     */
+    @SerializedName("r_id")
+    String objectId;
     /**
      *  回复内容
      */
@@ -113,6 +119,14 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
         this.subjectName = subjectName;
     }
 
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
+    }
+
     @Override
     public String toString() {
         return "ReplyReplyEntity{" +
@@ -122,6 +136,7 @@ public class ReplyReplyEntity implements ICommentEntity,Serializable{
                 ", isHost=" + isHost +
                 ", isReply=" + isReply +
                 ", objectName='" + objectName + '\'' +
+                ", objectId='" + objectId + '\'' +
                 ", replyTime='" + replyTime + '\'' +
                 '}';
     }

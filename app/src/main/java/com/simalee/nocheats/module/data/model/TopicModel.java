@@ -191,44 +191,5 @@ public class TopicModel implements ITopicModel {
 
     }
 
-    @Override
-    public void releaseComment(String userId, String floorId, String content, String photoUrls, final ReleaseCommentCallback callback) {
-        if (callback == null){
-            return ;
-        }
-
-        OkHttpUtils.post()
-                .url(Constant.Url.URL_RELEASE_COMMENT)
-                .addParams("u_id",userId)
-                .addParams("f_id",floorId)
-                .addParams("content",content)
-                .addParams("pic",photoUrls)
-                .build()
-                .execute(new StringCallback() {
-                    @Override
-                    public void onError(Call call, Exception e, int id) {
-                        callback.onError(e);
-                    }
-
-                    @Override
-                    public void onResponse(String response, int id) {
-                        LogUtils.d(TAG,"onResponse : "+ response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String msg = jsonObject.getString("msg");
-                            if ("0".equals(msg)){
-                                callback.onReleaseSuccess();
-                            }else{
-                                callback.onReleaseFailure();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-
-    }
-
 
 }

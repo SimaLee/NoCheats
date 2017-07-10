@@ -1,8 +1,8 @@
 package com.simalee.nocheats.module.data.entity.topic;
 
 import com.google.gson.annotations.SerializedName;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
-import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ReplyReplyEntity;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Lee Sima on 2017/6/22.
  */
 
-public class TopicDetailFloorEntity implements ICommentEntity {
+public class TopicDetailFloorEntity implements ICommentEntity,Comparable<TopicDetailFloorEntity> {
 
     /*{
         "id": "65fcc141f3ed4ecda04eb45b90ad4850",
@@ -229,5 +229,10 @@ public class TopicDetailFloorEntity implements ICommentEntity {
                 ", praiseCount=" + praiseCount +
                 ", repliesList=" + repliesList +
                 '}';
+    }
+
+    @Override
+    public int compareTo(TopicDetailFloorEntity o) {
+        return this.getCommentStorey() - o.getCommentStorey();
     }
 }

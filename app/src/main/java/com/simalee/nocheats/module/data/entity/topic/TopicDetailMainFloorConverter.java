@@ -1,7 +1,7 @@
 package com.simalee.nocheats.module.data.entity.topic;
 
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
-import com.simalee.nocheats.module.data.entity.ReplyReplyEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ReplyReplyEntity;
 
 import java.util.List;
 

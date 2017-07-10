@@ -2,7 +2,9 @@ package com.simalee.nocheats.module.topicsquare.presenter;
 
 import com.simalee.nocheats.common.util.DateUtils;
 import com.simalee.nocheats.common.util.LogUtils;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
+import com.simalee.nocheats.module.data.model.CommentModel;
+import com.simalee.nocheats.module.data.model.ICommentModel;
 import com.simalee.nocheats.module.data.model.ITopicModel;
 import com.simalee.nocheats.module.data.model.TopicModel;
 import com.simalee.nocheats.module.topicsquare.contract.TopicDetailContract;
@@ -19,6 +21,7 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
 
     private TopicDetailContract.TopicDetailView mTopicDetailView;
     private ITopicModel mTopicModel;
+    private ICommentModel mCommentModel;
 
 
     public TopicDetailPresenter(TopicDetailContract.TopicDetailView topicDetailView){
@@ -27,10 +30,20 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
         }
         mTopicDetailView = topicDetailView;
         mTopicModel = new TopicModel();
+        mCommentModel = new CommentModel();
     }
 
+    /**
+     * 加载话题详情
+     * @param topicId
+     * @param topicTime
+     */
     @Override
     public void loadTopicDetail(String topicId, String topicTime) {
+
+        if (mTopicDetailView != null){
+            mTopicDetailView.showLoadingProgress();
+        }
 
         mTopicModel.loadTopicDetail(topicId, topicTime, new ITopicModel.LoadTopicDetailCallback() {
             @Override
@@ -44,6 +57,7 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
             @Override
             public void onLoadTopicDetailSuccess(List<ICommentEntity> topicDetail) {
                 if (mTopicDetailView != null){
+                    mTopicDetailView.hideLoadingProgress();
                     mTopicDetailView.showTopicDetail(topicDetail);
                 }
             }
@@ -51,12 +65,18 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
             @Override
             public void onLoadTopicDetailFailure() {
                 if (mTopicDetailView != null){
+                    mTopicDetailView.hideLoadingProgress();
                     mTopicDetailView.showLoadTopicDetailFailure();
                 }
             }
         });
     }
 
+    /**
+     * 加载更多详情
+     * @param topicId
+     * @param topicTime
+     */
     @Override
     public void loadMoreComments(String topicId, String topicTime) {
 
@@ -97,10 +117,17 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
         });
     }
 
+    /**
+     * 发表评论
+     * @param userId
+     * @param floorId
+     * @param content
+     * @param photoUrls
+     */
     @Override
     public void releaseComment(String userId, String floorId, String content, String photoUrls) {
 
-        mTopicModel.releaseComment(userId, floorId, content, photoUrls, new ITopicModel.ReleaseCommentCallback() {
+        mCommentModel.releaseComment(userId, floorId, content, photoUrls, new ICommentModel.ReleaseCommentCallback() {
             @Override
             public void onError(Exception e) {
                 LogUtils.e(TAG,"error: " + e.toString());
@@ -121,6 +148,36 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
             }
         });
 
+    }
+
+    /**
+     * 回复某一层楼
+     * @param floorId
+     * @param userId
+     * @param content
+     */
+    @Override
+    public void replyComment(String floorId, String userId, String content) {
+        mCommentModel.replyComment(floorId, userId, content, new ICommentModel.ReleaseCommentCallback() {
+            @Override
+            public void onError(Exception e) {
+                LogUtils.e(TAG,"error: " + e.toString());
+            }
+
+            @Override
+            public void onReleaseSuccess() {
+                if (mTopicDetailView != null){
+                    mTopicDetailView.showCommentSuccess();
+                }
+            }
+
+            @Override
+            public void onReleaseFailure() {
+                if (mTopicDetailView != null){
+                    mTopicDetailView.showCommentFailure();
+                }
+            }
+        });
     }
 
     @Override

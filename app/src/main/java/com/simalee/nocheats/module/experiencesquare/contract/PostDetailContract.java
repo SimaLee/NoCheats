@@ -2,7 +2,7 @@ package com.simalee.nocheats.module.experiencesquare.contract;
 
 import com.simalee.nocheats.common.base.BasePresenter;
 import com.simalee.nocheats.common.base.BaseView;
-import com.simalee.nocheats.module.data.entity.ICommentEntity;
+import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 
 import java.util.List;
 
@@ -24,8 +24,10 @@ public interface PostDetailContract {
         void showCommentSuccess();
         void showCommentFailure();
 
-        void showLoadingMoreProgress();
+        void showLoadingProgress();
+        void hideLoadingProgress();
 
+        void showLoadingMoreProgress();
         void hideLoadingMoreProgress();
 
     }
@@ -35,5 +37,7 @@ public interface PostDetailContract {
         void loadMoreComments(String postId,String postTime);
 
         void releaseComment(String userId,String floorId,String content,String photoUrls);
+
+        void replyComment(String floorId,String userId,String content);
     }
 }
