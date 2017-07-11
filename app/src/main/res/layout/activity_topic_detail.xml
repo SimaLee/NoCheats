@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:hint="说出你的看法"
             android:textSize="18sp"
+            android:textColor="@color/colorBdiduText"
             android:layout_centerVertical="true"
             />
 

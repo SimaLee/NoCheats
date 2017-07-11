@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,7 +136,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         }
                     });
 
-            if ((data.getPicUrlList() != null) && (data.getPicUrlList().size() != 0)){
+            if ((data.getPicUrlList() != null) && (data.getPicUrlList().size() > 0)){
                 iv_postPic.setVisibility(View.VISIBLE);
 
                 //目前只有一张图片
@@ -178,6 +179,8 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         TextView tv_operation_type;
 
+        RelativeLayout rl_user;
+        RelativeLayout rl_comment_reply;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
@@ -199,6 +202,8 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
             tv_operation_type = (TextView) rootView.findViewById(R.id.tv_operation_type);
 
+            rl_user = (RelativeLayout) rootView.findViewById(R.id.rl_user);
+            rl_comment_reply = (RelativeLayout) rootView.findViewById(R.id.rl_comment_reply);
         }
 
         public void bindData(final PostDetailFloorEntity data){
@@ -224,6 +229,26 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_postStorey.setText("第"+data.getCommentStorey()+"楼");
             tv_postComment.setText(data.getCommentContent());
 
+            //为了用户交互做的调整
+            rl_user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnCommentClickListener != null){
+
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
+                    }
+                }
+            });
+
+            tv_postComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnCommentClickListener != null){
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
+                    }
+                }
+            });
+
             setCommentReply(data.getCommentId(),data.getRepliesList());
 
             tv_operation_type.setOnClickListener(new View.OnClickListener() {
@@ -245,53 +270,63 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 return;
             }
             if (replyList.size() == 1){
-
                 tv_firstReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setVisibility(View.GONE);
                 tv_moreReply.setVisibility(View.GONE);
 
                 tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
-                tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
+                //tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
 
             }else if (replyList.size() == 2){
 
                 tv_firstReply.setVisibility(View.VISIBLE);
                 tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
-                tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
+                //tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
 
                 //必须要设置 setMovementMethod 才能响应点击事件
                 tv_secondReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(1)));
-                tv_secondReply.setMovementMethod(LinkMovementMethod.getInstance());
-
+                //tv_secondReply.setMovementMethod(LinkMovementMethod.getInstance());
 
                 tv_moreReply.setVisibility(View.GONE);
+
             }else{
                // tv_firstReply.setText(replyList.get(0).getTestMsg());
                 tv_firstReply.setVisibility(View.VISIBLE);
                 tv_firstReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(0)));
-                tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
+                //tv_firstReply.setMovementMethod(LinkMovementMethod.getInstance());
 
 
                 tv_secondReply.setVisibility(View.VISIBLE);
                 tv_secondReply.setText(SpannableStringUtils.getReplySpannableString(replyList.get(1)));
-                tv_secondReply.setMovementMethod(LinkMovementMethod.getInstance());
+                //tv_secondReply.setMovementMethod(LinkMovementMethod.getInstance());
 
                 tv_moreReply.setVisibility(View.VISIBLE);
                 tv_moreReply.setText("更多"+(replyList.size()-2)+"条回复");
 
 
-                tv_moreReply.setOnClickListener(new View.OnClickListener() {
+                /*tv_moreReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (onMoreReplyClickListener != null){
-                            Toast.makeText(mContext,"查看更多回复",Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(mContext,"查看更多回复",Toast.LENGTH_SHORT).show();
                             onMoreReplyClickListener.onMoreReplyClick(floorId);
                         }
 
                     }
-                });
+                });*/
             }
+
+            //为了用户交互做的调整
+            rl_comment_reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onMoreReplyClickListener != null){
+                        onMoreReplyClickListener.onMoreReplyClick(floorId);
+                    }
+                }
+            });
+
         }
 
         /**

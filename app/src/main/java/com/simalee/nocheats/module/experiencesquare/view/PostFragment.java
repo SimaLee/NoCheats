@@ -125,7 +125,7 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
         LogUtils.d(TAG,"onResume invoked");
         if (shouldResume){
             mPresenter.start();
-            shouldResume = false;
+            //shouldResume = false;
         }
 
     }

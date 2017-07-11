@@ -29,7 +29,7 @@ public class SpannableStringUtils {
         subjectName.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                LogUtils.d("PostDetail",entity.getSubjectName() + "is clicked");
+                //LogUtils.d("PostDetail",entity.getSubjectName() + "is clicked");
             }
             @Override
             public void updateDrawState(TextPaint ds) {
@@ -49,7 +49,7 @@ public class SpannableStringUtils {
 
         if (entity.getObjectName() != null && !("null".equals(entity.getObjectName()))){
             // 回复 某某某 :
-            SpannableString replyToObjectName = new SpannableString(" 回复 "+ entity.getObjectName()+" :");
+            SpannableString replyToObjectName = new SpannableString(" 回复 "+ entity.getObjectName()+" : ");
             resBuilder.append(replyToObjectName);
         }else{
             resBuilder.append(" : ");
