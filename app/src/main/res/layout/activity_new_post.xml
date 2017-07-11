@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:hint="你的主题"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorBdiduText"
             android:inputType="text"
             />
 
@@ -57,7 +57,7 @@
     <org.angmarch.views.NiceSpinner
         android:id="@+id/spinner_post_type"
         android:layout_below="@id/text_input_layout_title"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="4dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="15dp"
@@ -69,7 +69,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/spinner_post_type"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="10dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:textColorHint="@color/colorHint"
@@ -83,7 +83,7 @@
             android:hint="经历描述"
             android:paddingTop="10dp"
             android:gravity="bottom"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorBdiduText"
             android:maxLines="10"
             android:maxLength="1000"
             />
@@ -93,19 +93,19 @@
     <ImageView
         android:layout_below="@id/text_input_layout_content"
         android:id="@+id/add_picture"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@mipmap/add_picture"/>
 
     <ImageView
         android:layout_below="@id/text_input_layout_content"
         android:id="@+id/iv_post_photo"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp"/>
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
 
 
     <TextView

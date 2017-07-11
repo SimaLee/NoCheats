@@ -65,10 +65,15 @@ public class TopicPresenter implements TopicsContract.Presenter {
                 }
 
                 @Override
-                public void onLoadTopicsSuccess(List<TopicEntity> postEntities) {
+                public void onLoadTopicsSuccess(List<TopicEntity> topicEntities) {
                     if (mAllTopicsView.isActive()){
                         mAllTopicsView.hideLoadingProgress();
-                        mAllTopicsView.showTopics(postEntities);
+                        if (topicEntities == null || topicEntities.size() == 0){
+                            mAllTopicsView.showNoTopics();
+                        }else{
+
+                            mAllTopicsView.showTopics(topicEntities);
+                        }
                     }
                 }
 

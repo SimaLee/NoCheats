@@ -13,7 +13,7 @@ public interface ITopicModel {
 
     interface LoadTopicsCallback{
         void onError(Exception e);
-        void onLoadTopicsSuccess(List<TopicEntity> postEntities);
+        void onLoadTopicsSuccess(List<TopicEntity> topicEntities);
         void onLoadTopicsFailure();
     }
 

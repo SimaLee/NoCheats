@@ -23,13 +23,26 @@ public class PostDetailMainFloorConverter implements ICommentEntity {
         this.postTitle = postTitle;
     }
 
+    public int getPostType() {
+        return postType;
+    }
+
+    public void setPostType(int postType) {
+        this.postType = postType;
+    }
     /**
      *  帖子的title
      */
     private String postTitle;
 
-    public PostDetailMainFloorConverter(String postTitle,PostDetailFloorEntity postDetailMainFloorEntity) {
+    /**
+     * 帖子的类别
+     */
+    private int postType;
+
+    public PostDetailMainFloorConverter(String postTitle,int postType,PostDetailFloorEntity postDetailMainFloorEntity) {
         this.postTitle = postTitle;
+        this.postType = postType;
         mPostDetailFloorEntity = postDetailMainFloorEntity;
     }
 
@@ -122,6 +135,13 @@ public class PostDetailMainFloorConverter implements ICommentEntity {
         mPostDetailFloorEntity.setRepliesList(repliesList);
     }
 
+    public List<String> getPicUrlList() {
+        return mPostDetailFloorEntity.getPicUrlList();
+    }
+
+    public void setPicUrlList(List<String> picUrlList) {
+        mPostDetailFloorEntity.setPicUrlList(picUrlList);
+    }
 
     @Override
     public String toString() {

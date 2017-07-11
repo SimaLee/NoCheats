@@ -1,5 +1,6 @@
 package com.simalee.nocheats.module.topicsquare.view;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -48,7 +50,7 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
 
     private RecyclerView mRecyclerView;
     private TwinklingRefreshLayout mRefreshLayout;
-
+    private TextView tv_no_topics;
     private TopicAdapter mTopicAdapter;
 
     private TopicPresenter mTopicPresenter;
@@ -82,7 +84,8 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRefreshLayout = (TwinklingRefreshLayout) view.findViewById(R.id.refresh_layout);
-
+        tv_no_topics = (TextView) view.findViewById(R.id.tv_no_topics);
+        tv_no_topics.setVisibility(View.GONE);
         setupRecyclerView();
         setupRefreshLayout();
 
@@ -199,7 +202,7 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
     @Override
     public void onFloatingActionButtonClick(View view) {
         Intent intent = new Intent(mContext,NewTopicActivity.class);
-        startActivity(intent);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
     }
 
     private void showToastShort(String msg){
@@ -215,6 +218,19 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
     @Override
     public void showLoadMoreTopics(List<TopicEntity> appendTopicEntityList) {
         mTopicAdapter.appendData(appendTopicEntityList);
+    }
+
+    @Override
+    public void showNoTopics() {
+        tv_no_topics.setVisibility(View.VISIBLE);
+        tv_no_topics.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,NewTopicActivity.class);
+                tv_no_topics.setVisibility(View.GONE);
+                startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
+            }
+        });
     }
 
     @Override

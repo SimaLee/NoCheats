@@ -8,8 +8,11 @@
         android:id="@+id/tv_topic_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
         android:textSize="30sp"
         android:gravity="start"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:text="帖子标题 这是标题 这是标题 这是标题 这是标题"
         />
 
@@ -23,7 +26,7 @@
     <RelativeLayout
         android:id="@+id/rl_user"
         android:layout_below="@id/diver_1"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -31,6 +34,7 @@
             android:id="@+id/image_user"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:layout_marginLeft="3dp"
             android:src="@drawable/ic_android_black_36dp" />
         <TextView
             android:id="@+id/tv_user_name"
@@ -38,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/image_user"
             android:layout_marginLeft="4dp"
+            android:layout_marginTop="2dp"
             android:layout_alignParentTop="true"
             android:text="德玛西亚"
             android:textSize="14sp"
@@ -49,7 +54,7 @@
             android:layout_toRightOf="@id/tv_user_name"
             android:layout_marginLeft="2dp"
             android:layout_alignTop="@id/tv_user_name"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:text="楼主"
             android:gravity="left"
             android:textColor="@color/colorAccent"/>
@@ -90,8 +95,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/diver_2"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="6dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:textSize="14sp"
         android:gravity="start"
         android:text="这是帖子的内容啊"/>
@@ -99,12 +106,13 @@
     <ImageView
         android:id="@+id/iv_pic"
         android:layout_below="@id/tv_topic_content"
-        android:layout_centerInParent="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:background="@mipmap/ic_post"
-        android:scaleType="center"/>
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
 
     <View
         android:layout_below="@id/iv_pic"

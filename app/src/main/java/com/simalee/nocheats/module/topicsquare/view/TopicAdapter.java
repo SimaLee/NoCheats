@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
+import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.topic.TopicEntity;
@@ -91,7 +92,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
         public void bindData(TopicEntity data){
 
             Glide.with(mContext)
-                    .load(data.getAvatar())
+                    .load(Constant.Url.BASE_URL + data.getAvatar())
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {

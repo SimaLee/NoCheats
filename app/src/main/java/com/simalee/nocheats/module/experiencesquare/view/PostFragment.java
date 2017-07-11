@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
@@ -19,6 +20,7 @@ import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseFragment;
+import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.post.PostEntity;
 import com.simalee.nocheats.module.experiencesquare.contract.PostsContract;
@@ -55,6 +57,7 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
 
     private RecyclerView mRecyclerView;
     private TwinklingRefreshLayout mRefreshLayout;
+    private TextView tv_no_posts;
     private PostAdapter mPostAdapter;
 
     private  boolean shouldResume = true;
@@ -108,7 +111,8 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_view);
         mRefreshLayout = (TwinklingRefreshLayout) rootView.findViewById(R.id.refresh_layout);
-
+        tv_no_posts = (TextView) rootView.findViewById(R.id.tv_no_posts);
+        tv_no_posts.setVisibility(View.GONE);
         setupRecyclerView();
         setupRefreshLayout();
         return rootView;
@@ -201,6 +205,9 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
 
     @Override
     public void showPosts(List<PostEntity> postEntities) {
+        if (tv_no_posts.getVisibility() == View.VISIBLE){
+            tv_no_posts.setVisibility(View.GONE);
+        }
         mPostAdapter.replaceData(postEntities);
     }
 
@@ -211,17 +218,29 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
 
 
     @Override
-    public void showPostDetail(String postId,String postTime,String postTitle) {
+    public void showPostDetail(String postId,String postTime,String postTitle,int postType) {
         Intent intent = new Intent(mContext,PostDetailActivity.class);
         intent.putExtra("postId",postId);
         intent.putExtra("postTime",postTime);
         intent.putExtra("postTitle",postTitle);
+        intent.putExtra("postType",postType);
         startActivity(intent);
     }
 
     @Override
     public void showNoPosts() {
-        showToastShort("当前还没有数据哦！");
+
+        tv_no_posts.setVisibility(View.VISIBLE);
+        tv_no_posts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                tv_no_posts.setVisibility(View.GONE);
+                Intent intent = new Intent(mContext,NewPostActivity.class);
+                intent.putExtra("type",CURRENT_INDEX);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -262,5 +281,13 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
     @Override
     public void setPresenter(PostsContract.Presenter presenter) {
         // do nothing
+    }
+
+    /**
+     * hhh
+     * @param msg
+     */
+    private void shortToast(String msg){
+        Toast.makeText(mContext,msg,Toast.LENGTH_SHORT).show();
     }
 }

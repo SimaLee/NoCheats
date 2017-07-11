@@ -158,7 +158,7 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
         PostEntity one = new PostEntity();
         one.setUserName("德玛西亚");
         one.setPostTitle("大骗子");
-        one.setPostType("网络诈骗");
+        one.setPostType(1);
         one.setPostContent("今天被骗了，好气啊");
         one.setPoint("150");
         one.setPostViewCount(12);

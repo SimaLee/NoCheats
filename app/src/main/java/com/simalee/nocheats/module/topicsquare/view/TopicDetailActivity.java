@@ -398,8 +398,8 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
         }
         TopicDetailFloorEntity mainFloor = (TopicDetailFloorEntity) topicCommentEntityList.get(0);
 
-        //Attention !
-        mainFloorId = mainFloor.getCommentId();
+        //回复的是楼主
+        mainFloorId = mainFloor.getTopicId();
 
         TopicDetailMainFloorConverter mainFloorConverter = new TopicDetailMainFloorConverter(topicTitle,mainFloor);
 

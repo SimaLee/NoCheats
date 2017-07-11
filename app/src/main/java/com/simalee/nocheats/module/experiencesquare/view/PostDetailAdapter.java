@@ -15,8 +15,10 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
+import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.SpannableStringUtils;
+import com.simalee.nocheats.common.util.TypeUtils;
 import com.simalee.nocheats.module.data.entity.post.PostDetailFloorEntity;
 import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.PostDetailMainFloorConverter;
@@ -111,9 +113,11 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_userName = (TextView) rootView.findViewById(R.id.tv_user_name);
             tv_isHost = (TextView) rootView.findViewById(R.id.tv_is_host);
             tv_level = (TextView) rootView.findViewById(R.id.tv_level);
+            tv_level.setVisibility(View.GONE);
             tv_postType = (TextView) rootView.findViewById(R.id.tv_post_type);
             tv_postContent = (TextView) rootView.findViewById(R.id.tv_post_content);
             iv_postPic = (ImageView) rootView.findViewById(R.id.iv_pic);
+            iv_postPic.setVisibility(View.GONE);
         }
 
         public void bindData(PostDetailMainFloorConverter data){
@@ -123,7 +127,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_postTitle.setText(data.getPostTitle());
 
             Glide.with(mContext)
-                    .load(data.getCommentUserAvatar())
+                    .load(Constant.Url.BASE_URL + data.getCommentUserAvatar())
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -131,11 +135,28 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         }
                     });
 
+            if ((data.getPicUrlList() != null) && (data.getPicUrlList().size() != 0)){
+                iv_postPic.setVisibility(View.VISIBLE);
+
+                //目前只有一张图片
+                String picUrl = Constant.Url.BASE_URL + data.getPicUrlList().get(0);
+                Glide.with(mContext)
+                        .load(picUrl.replace(Constant.CODE.FOLDER_THUMBNAIL,Constant.CODE.FOLDER_ORIGINAL))
+                        .into(new SimpleTarget<GlideDrawable>() {
+                            @Override
+                            public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                                iv_postPic.setImageDrawable(glideDrawable);
+                            }
+                        });
+            }
+
             tv_userName.setText(data.getCommentUserName());
             //tv_isHost 不用设置
             //tv_level.setText(data.getCommentUserPoint()); 没有返回
-            //tv_postType.setText();
+            tv_postType.setText(TypeUtils.getTypeString(data.getPostType()));
+
             tv_postContent.setText(data.getCommentContent());
+
         }
     }
 
@@ -168,6 +189,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_userName = (TextView) rootView.findViewById(R.id.tv_user_name);
             tv_isHost = (TextView) rootView.findViewById(R.id.tv_is_host);
             tv_level = (TextView) rootView.findViewById(R.id.tv_level);
+            tv_level.setVisibility(View.GONE);
             tv_postComment = (TextView) rootView.findViewById(R.id.tv_post_comment);
 
             tv_postStorey = (TextView) rootView.findViewById(R.id.tv_post_storey);
@@ -180,7 +202,16 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void bindData(final PostDetailFloorEntity data){
-            //image_user;
+
+
+            Glide.with(mContext)
+                    .load(Constant.Url.BASE_URL + data.getCommentUserAvatar())
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            image_user.setImageDrawable(glideDrawable);
+                        }
+                    });
             tv_userName.setText(data.getCommentUserName());
 
             if (data.isHost()){

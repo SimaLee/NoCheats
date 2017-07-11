@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
+import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.SpannableStringUtils;
 import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
@@ -108,9 +109,15 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_userName = (TextView) rootView.findViewById(R.id.tv_user_name);
             tv_isHost = (TextView) rootView.findViewById(R.id.tv_is_host);
             tv_level = (TextView) rootView.findViewById(R.id.tv_level);
+
+            tv_level.setVisibility(View.GONE);
+
             tv_topicType = (TextView) rootView.findViewById(R.id.tv_topic_type);
             tv_topicContent = (TextView) rootView.findViewById(R.id.tv_topic_content);
             iv_topicPic = (ImageView) rootView.findViewById(R.id.iv_pic);
+
+            iv_topicPic.setVisibility(View.GONE);
+
         }
 
         public void bindData(TopicDetailMainFloorConverter data){
@@ -122,13 +129,29 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_topicTitle.setText(data.getTopicTitle());
 
             Glide.with(mContext)
-                    .load(data.getCommentUserAvatar())
+                    .load(Constant.Url.BASE_URL + data.getCommentUserAvatar())
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
                             image_user.setImageDrawable(glideDrawable);
                         }
                     });
+
+           if (data.getPicUrlList() != null && data.getPicUrlList().size() > 0){
+               iv_topicPic.setVisibility(View.VISIBLE);
+               LogUtils.d(TAG,data.getPicUrlList().toString());
+
+               String picUrl = Constant.Url.BASE_URL + data.getPicUrlList().get(0);
+               //目前只有一张图片
+               Glide.with(mContext)
+                       .load(picUrl.replace(Constant.CODE.FOLDER_THUMBNAIL,Constant.CODE.FOLDER_ORIGINAL))
+                       .into(new SimpleTarget<GlideDrawable>() {
+                           @Override
+                           public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                               iv_topicPic.setImageDrawable(glideDrawable);
+                           }
+                       });
+           }
 
             tv_userName.setText(data.getCommentUserName());
             //tv_ishost
@@ -177,7 +200,16 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         public void bindData(final TopicDetailFloorEntity data) {
-            //image_user;
+
+            Glide.with(mContext)
+                    .load(Constant.Url.BASE_URL + data.getCommentUserAvatar())
+                    .into(new SimpleTarget<GlideDrawable>() {
+                        @Override
+                        public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
+                            image_user.setImageDrawable(glideDrawable);
+                        }
+                    });
+
             tv_userName.setText(data.getCommentUserName());
 
             if (data.isHost()) {

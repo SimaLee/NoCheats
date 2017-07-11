@@ -104,6 +104,14 @@ public class PostDetailFloorEntity implements ICommentEntity,Serializable,Compar
         this.repliesList = repliesList;
     }
 
+    public List<String> getPicUrlList() {
+        return picUrlList;
+    }
+
+    public void setPicUrlList(List<String> picUrlList) {
+        this.picUrlList = picUrlList;
+    }
+
     public PostDetailFloorEntity() {
     }
 
@@ -179,6 +187,7 @@ public class PostDetailFloorEntity implements ICommentEntity,Serializable,Compar
      */
     @SerializedName("content")
     String commentContent;
+
 
     /**
      * 楼层回复的图片url

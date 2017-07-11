@@ -45,7 +45,8 @@
             android:src="@drawable/ic_add_photo"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="6dp"/>
+            android:layout_marginLeft="6dp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/ib_send"

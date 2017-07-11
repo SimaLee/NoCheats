@@ -18,6 +18,8 @@ public interface TopicsContract {
         void showTopics(List<TopicEntity> topicEntityList);
         void showLoadMoreTopics(List<TopicEntity> appendTopicEntityList);
 
+        void showNoTopics();
+
         void showLoadingProgress();
         void showLoadingMoreProgress();
 

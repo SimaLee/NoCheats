@@ -49,8 +49,6 @@ public class Constant {
         //查看我的主题
         public static final String URL_LOAD_MY_TOPIC = BASE_URL + "checkMyTheme.action";
 
-        //上传图片
-        public static final String URL_UPLOAD_PIC = BASE_URL + "uploadPostPic.action";
 
         //-----------------------------------------------------------
         public static final String URL_GET_USER_INFORMATION = BASE_URL +"checkUserInf.action";
@@ -83,6 +81,9 @@ public class Constant {
         public static final int PICK_FROM_CAMERA = 0;
         public static final int PICK_FROM_FILE = 1;
         public static final int ACTION_CROP = 2;
+
+        public static final String FOLDER_THUMBNAIL = "thumbnail";//缩略图
+        public static final String FOLDER_ORIGINAL = "original";//原图
 
     }
 }

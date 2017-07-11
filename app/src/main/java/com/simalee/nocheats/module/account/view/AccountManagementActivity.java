@@ -258,6 +258,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                 .inflate(R.layout.activity_account_management, null);
         mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
     }
+
     public void showBirthdayDialog() {
 
         mBirthdayPickerFragment = new BirthdayPickerFragment();

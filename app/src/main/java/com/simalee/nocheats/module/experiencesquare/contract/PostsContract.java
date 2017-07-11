@@ -22,7 +22,7 @@ public interface PostsContract {
         void showPosts(List<PostEntity> postEntities);
         void showLoadMorePosts(List<PostEntity> appendPostEntities);
 
-        void showPostDetail(String postId,String postTime,String postTitle);
+        void showPostDetail(String postId,String postTime,String postTitle,int postType);
         void showNoPosts();
         void showLoadingProgress();
         void hideLoadingProgress();

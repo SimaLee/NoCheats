@@ -1,5 +1,6 @@
 package com.simalee.nocheats.module.experiencesquare.view;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseFragment;
 import com.simalee.nocheats.common.base.OnFabClickListener;
+import com.simalee.nocheats.module.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +38,11 @@ public class ExperienceSquareFragment extends BaseFragment implements OnFabClick
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+
+    /**
+     * 当前所在的pageindex 用于设置newpost的 spinner
+     */
+    int currentType = 0;
 
     public static ExperienceSquareFragment newInstance(){
         Bundle args = new Bundle();
@@ -76,7 +83,7 @@ public class ExperienceSquareFragment extends BaseFragment implements OnFabClick
         mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout_1);
         mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
 
-        String[] titles = {"推荐","金融骗术","电信骗术","网络骗术","街头骗术","其他骗术"};
+        String[] titles = {"首页","金融骗术","电信骗术","网络骗术","街头骗术","其他骗术"};
 
         for (int i = 0;i < titles.length;i++){
             mTabLayout.addTab(mTabLayout.newTab().setText(titles[i]));
@@ -85,7 +92,9 @@ public class ExperienceSquareFragment extends BaseFragment implements OnFabClick
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Log.d(TAG,"选择了："+tab.getText());
+                Log.d(TAG,"选择了：position: "+tab.getPosition());
+                currentType = tab.getPosition();
+
             }
 
             @Override
@@ -114,12 +123,9 @@ public class ExperienceSquareFragment extends BaseFragment implements OnFabClick
 
     @Override
     public void onFloatingActionButtonClick(View view) {
-        showToastShort("点击了发布新帖子");
-
         Intent intent = new Intent(getContext(),NewPostActivity.class);
-
-        startActivity(intent);
-
+        intent.putExtra("type",currentType);
+        startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(getActivity()).toBundle());
     }
 
     class PageAdapter extends FragmentPagerAdapter {

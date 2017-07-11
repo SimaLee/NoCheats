@@ -64,7 +64,8 @@ public class PostEntity implements Serializable{
     /**
      * 帖子类型
      */
-    String postType;
+    @SerializedName("p_type")
+    int postType;
     /**
      * 帖子标题
      */
@@ -82,6 +83,13 @@ public class PostEntity implements Serializable{
      */
     @SerializedName("pic")
     List<String> postPhotoUrlList;
+
+
+    /**
+     *  主题评论数
+     */
+    @SerializedName("level")
+    int postCommentCount;
 
     /**
      * 帖子被查看数
@@ -123,7 +131,13 @@ public class PostEntity implements Serializable{
         this.postContent = postContent;
     }
 
+    public int getPostCommentCount() {
+        return postCommentCount;
+    }
 
+    public void setPostCommentCount(int postCommentCount) {
+        this.postCommentCount = postCommentCount;
+    }
 
     public String getPostTitle() {
         return postTitle;
@@ -133,11 +147,11 @@ public class PostEntity implements Serializable{
         this.postTitle = postTitle;
     }
 
-    public String getPostType() {
+    public int getPostType() {
         return postType;
     }
 
-    public void setPostType(String postType) {
+    public void setPostType(int postType) {
         this.postType = postType;
     }
 
@@ -201,6 +215,7 @@ public class PostEntity implements Serializable{
                 ", postTitle='" + postTitle + '\'' +
                 ", postContent='" + postContent + '\'' +
                 ", postPhotoUrlList=" + postPhotoUrlList +
+                ", postCommentCount=" + postCommentCount +
                 ", postViewCount=" + postViewCount +
                 ", postTime='" + postTime + '\'' +
                 '}';

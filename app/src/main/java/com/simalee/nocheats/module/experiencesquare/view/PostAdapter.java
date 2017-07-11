@@ -12,8 +12,10 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.simalee.nocheats.R;
+import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.common.util.LogUtils;
+import com.simalee.nocheats.common.util.TypeUtils;
 import com.simalee.nocheats.module.data.entity.post.PostEntity;
 
 import java.util.ArrayList;
@@ -93,7 +95,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         public void bindData(PostEntity postEntity){
 
             Glide.with(mContext)
-                    .load(postEntity.getAvatar())
+                    .load(Constant.Url.BASE_URL + postEntity.getAvatar())
                     .into(new SimpleTarget<GlideDrawable>() {
                         @Override
                         public void onResourceReady(GlideDrawable glideDrawable, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -103,10 +105,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
             tv_userName.setText(postEntity.getUserName());
             tv_userLevel.setText(IntegralUtils.getLevel(postEntity.getPoint()) + "");
-            tv_postType.setText(postEntity.getPostType());
+            tv_postType.setText(TypeUtils.getTypeString(postEntity.getPostType()));
             tv_postTitle.setText(postEntity.getPostTitle());
             tv_postContent.setText(postEntity.getPostContent());
-            tv_postViewCount.setText(""+postEntity.getPostViewCount());
+            tv_postViewCount.setText(""+postEntity.getPostCommentCount());
         }
 
         @Override

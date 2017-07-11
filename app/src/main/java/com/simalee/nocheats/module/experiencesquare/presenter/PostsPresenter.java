@@ -85,7 +85,11 @@ public class PostsPresenter implements PostsContract.Presenter {
                 public void onLoadPostsSuccess(List<PostEntity> postEntities) {
                     if (mPostView.isActive()){
                         mPostView.hideLoadingProgress();
-                        mPostView.showPosts(postEntities);
+                        if (postEntities.size() == 0){
+                            mPostView.showNoPosts();
+                        }else{
+                            mPostView.showPosts(postEntities);
+                        }
                     }
                 }
 
@@ -138,7 +142,8 @@ public class PostsPresenter implements PostsContract.Presenter {
             throw new NullPointerException(" postPresenter:postEntity is null");
         }
         if (mPostView!= null && mPostView.isActive()){
-            mPostView.showPostDetail(postEntity.getId(),postEntity.getPostTime(),postEntity.getPostTitle());
+            mPostView.showPostDetail(postEntity.getId(),postEntity.getPostTime(),
+                    postEntity.getPostTitle(),postEntity.getPostType());
         }
     }
 
@@ -187,7 +192,7 @@ public class PostsPresenter implements PostsContract.Presenter {
         one.setUserName("德玛西亚");
         one.setPoint("3");
         one.setPostTitle("大骗子");
-        one.setPostType("网络诈骗");
+        one.setPostType(1);
         one.setPostContent("今天被骗了，好气啊");
         one.setPostViewCount(12);
         ArrayList<PostEntity> data = new ArrayList<>();
@@ -206,7 +211,7 @@ public class PostsPresenter implements PostsContract.Presenter {
         one.setUserName("不是首页");
         one.setPoint("3");
         one.setPostTitle("大骗子");
-        one.setPostType("网络诈骗");
+        one.setPostType(2);
         one.setPostContent("今天被骗了，好气啊");
         one.setPostViewCount(12);
         ArrayList<PostEntity> data = new ArrayList<>();
@@ -225,7 +230,7 @@ public class PostsPresenter implements PostsContract.Presenter {
         one.setUserName("下拉刷新");
         one.setPoint("3");
         one.setPostTitle("大骗子");
-        one.setPostType("网络诈骗");
+        one.setPostType(3);
         one.setPostContent("今天被骗了，好气啊");
         one.setPostViewCount(12);
         ArrayList<PostEntity> data = new ArrayList<>();

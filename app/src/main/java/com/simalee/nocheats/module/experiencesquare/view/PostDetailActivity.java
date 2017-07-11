@@ -27,6 +27,7 @@ import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.PreferenceUtil;
+import com.simalee.nocheats.common.util.TypeUtils;
 import com.simalee.nocheats.module.data.entity.post.PostDetailFloorEntity;
 import com.simalee.nocheats.module.data.entity.comment.ICommentEntity;
 import com.simalee.nocheats.module.data.entity.post.PostDetailMainFloorConverter;
@@ -66,6 +67,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
     String postId;
     String postTime;
     String postTitle;
+    int postType;
 
     /**
      *  用于响应下方的发表评论的功能
@@ -93,10 +95,11 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         postId = getIntent().getStringExtra("postId");
         postTime = getIntent().getStringExtra("postTime");
         postTitle = getIntent().getStringExtra("postTitle");
+        postType = getIntent().getIntExtra("postType",1);
         LogUtils.d(TAG,"postDetail: postId is -> " + postId);
         LogUtils.d(TAG,"postDetail: postTime is -> " + postTime);
         LogUtils.d(TAG,"postDetail: postTitle is -> " + postTitle);
-
+        LogUtils.d(TAG,"postDetail: postType is -> " + TypeUtils.getTypeString(postType));
         mPostDetailPresenter = new PostDetailPresenter(this);
 
         userId = PreferenceUtil.getString(this,PreferenceUtil.USER_ID);
@@ -309,7 +312,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         shortToast("发表评论成功！");
         LogUtils.d(TAG,"postDetail: postTime is -> " + postTime);
         //TODO 优化交互逻辑
-       // mPostDetailPresenter.loadPostDetail(postId,postTime);
+        mPostDetailPresenter.loadPostDetail(postId,postTime);
     }
 
     @Override
@@ -429,9 +432,9 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         PostDetailFloorEntity mainFloor = (PostDetailFloorEntity) postCommentEntityList.get(0);
 
         //Attention !
-        mainFloorId = mainFloor.getCommentId();
+        mainFloorId = mainFloor.getPostId();
 
-        PostDetailMainFloorConverter mainFloorConverter = new PostDetailMainFloorConverter(postTitle,mainFloor);
+        PostDetailMainFloorConverter mainFloorConverter = new PostDetailMainFloorConverter(postTitle,postType,mainFloor);
 
         postCommentEntityList.set(0,mainFloorConverter);
 
