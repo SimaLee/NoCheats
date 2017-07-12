@@ -35,10 +35,10 @@
             android:layout_alignBottom="@id/tv_user_name"
             android:layout_toRightOf="@id/tv_user_name"
             android:layout_marginLeft="4dp"
-            android:text="3"
+            android:text="Lv 3"
             android:textSize="14sp"
             android:gravity="center"
-            android:textColor="@color/colorCheatType"/>
+            android:textColor="@color/colorLevel"/>
 
         <TextView
             android:id="@+id/tv_post_type"

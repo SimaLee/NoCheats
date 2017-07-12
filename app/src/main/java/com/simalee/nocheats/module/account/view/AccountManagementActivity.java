@@ -338,7 +338,7 @@ public class AccountManagementActivity extends BaseActivity implements View.OnCl
                 showPopUpWindow();
                 break;
             case R.id.rl_set_name:
-                Toast.makeText(AccountManagementActivity.this, "昵称不可修改", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(AccountManagementActivity.this, "昵称不可修改", Toast.LENGTH_SHORT).show();
 //                bundle.putString("name", user_name);
 //                Intent a = new Intent(AccountManagementActivity.this, SetNameActivity.class);
 //                a.putExtras(bundle);

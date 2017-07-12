@@ -107,6 +107,37 @@ public class PreviousTopicPresenter implements PreviousTopicContract.Presenter {
         }
     }
 
+    /**
+     * 删除帖子
+     * @param userId
+     * @param topicId
+     */
+    @Override
+    public void deleteTopic(String userId, String topicId) {
+
+        mTopicModel.deleteTopic(userId, topicId, new ITopicModel.DeleteTopicCallback() {
+            @Override
+            public void onError(Exception e) {
+                LogUtils.d(TAG,"error : " + e.toString());
+            }
+
+            @Override
+            public void onTopicDeletedSuccess() {
+                if (mPreviousTopicView != null){
+                    mPreviousTopicView.showDeleteTopicSuccess();
+                }
+            }
+
+            @Override
+            public void onTopicDeletedFailure(String reason) {
+                if (mPreviousTopicView != null){
+                    mPreviousTopicView.showDeleteTopicFailure(reason);
+                }
+            }
+        });
+
+    }
+
     @Override
     public void start() {
         // do nothing

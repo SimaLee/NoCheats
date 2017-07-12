@@ -50,16 +50,17 @@
 
         <!-- experience module start -->
         <activity android:name=".module.experiencesquare.view.PostDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus"/>
         <activity android:name=".module.experiencesquare.view.NewPostActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".module.experiencesquare.view.ReplyDetailActivity"/>
+        <activity android:name=".module.experiencesquare.view.ReplyDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus"/>
 
         <!-- experience module end -->
 
         <!-- topic module start -->
         <activity android:name=".module.topicsquare.view.TopicDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus"/>
         <activity android:name=".module.topicsquare.view.NewTopicActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 

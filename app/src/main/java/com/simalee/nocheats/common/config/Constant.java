@@ -49,6 +49,10 @@ public class Constant {
         //查看我的主题
         public static final String URL_LOAD_MY_TOPIC = BASE_URL + "checkMyTheme.action";
 
+        //删除帖子
+        public static final String URL_DELETE_POST = BASE_URL + "deletePost.action";
+        //删除主题
+        public static final String URL_DELETE_TOPIC = BASE_URL + "deletePost.action";
 
         //-----------------------------------------------------------
         public static final String URL_GET_USER_INFORMATION = BASE_URL +"checkUserInf.action";

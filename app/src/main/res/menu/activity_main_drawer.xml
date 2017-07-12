@@ -4,24 +4,24 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_homepage"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_experiencesquare"
             android:title="经历广场" />
         <item
             android:id="@+id/nav_topic_square"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_menu_topicsquare"
             android:title="话题广场" />
         <item
             android:id="@+id/nav_your_post"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_your_post"
             android:title="你的帖子" />
         <item
             android:id="@+id/nav_your_topic"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_your_topic"
             android:title="你的主题" />
 
         <item
             android:id="@+id/nav_assistant"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_assistant"
             android:title="防骗小助手" />
     </group>
 

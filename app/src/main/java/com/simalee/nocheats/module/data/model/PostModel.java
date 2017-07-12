@@ -224,5 +224,48 @@ public class PostModel implements IPostModel{
                 });
     }
 
+    /**
+     * 删除帖子
+     * @param userId
+     * @param postId
+     * @param callback
+     */
+    @Override
+    public void deletePost(String userId, String postId, final DeletePostCallback callback) {
+        if (callback == null){
+            return;
+        }
+
+        OkHttpUtils.post()
+                .url(Constant.Url.URL_DELETE_POST)
+                .addParams("u_id",userId)
+                .addParams("p_id",postId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onError(e);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.d(TAG,"onResponse : " + response);
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String msg = jsonObject.getString("msg");
+
+                            if ("0".equals(msg)){
+                                callback.onPostDeletedSuccess();
+                            }else{
+                                callback.onPostDeletedFailure("删除帖子失败！");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
 
 }

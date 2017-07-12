@@ -1,14 +1,21 @@
 package com.simalee.nocheats.module.experiencesquare.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +57,11 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
      */
     int postType = 1;
 
+    /**
+     * 删除的项的index
+     */
+    int deleteItemIndex = -1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,10 +95,18 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
 
         mPostAdapter = new PostAdapter(this,new ArrayList<PostEntity>(0));
 
-        mPostAdapter.setRecyclerItemClickListener(new PostAdapter.OnRecyclerItemClickListener() {
+        mPostAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, PostEntity postEntity) {
                 mPreviousPostPresenter.openPostDetails(postEntity);
+            }
+        });
+
+        mPostAdapter.setOnItemLongClickListener(new PostAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position, PostEntity postEntity) {
+                deleteItemIndex = position;
+                showPopupWindow(postEntity);
             }
         });
 
@@ -154,22 +174,77 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
         });
     }
 
-    private ArrayList<PostEntity> testData(){
-        PostEntity one = new PostEntity();
-        one.setUserName("德玛西亚");
-        one.setPostTitle("大骗子");
-        one.setPostType(1);
-        one.setPostContent("今天被骗了，好气啊");
-        one.setPoint("150");
-        one.setPostViewCount(12);
-        ArrayList<PostEntity> data = new ArrayList<>();
-        data.add(one);
-        data.add(one);
-        data.add(one);
-        data.add(one);
-        data.add(one);
 
-        return data;
+    /**
+     * 删除某一项
+     * @param postEntity
+     */
+    private void showPopupWindow(final PostEntity postEntity) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.popupwindow_delete_post, null);
+        final PopupWindow mPopWindow = new PopupWindow(contentView,
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+        mPopWindow.setContentView(contentView);
+        //设置点击空白地方消失
+        mPopWindow.setFocusable(true);
+        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        //设置空白地方的背景色
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.6f;
+        getWindow().setAttributes(lp);
+        //设置popupWindow消失的时候做的事情 即把背景色恢复
+        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+            }
+        });
+
+//        mPopWindow.setAnimationStyle(R.style.AnimationPreview);
+
+
+        Button bt_delete_post = (Button) contentView.findViewById(R.id.bt_delete_post);
+        Button bt_cancel = (Button) contentView.findViewById(R.id.bt_cancel);
+
+        bt_delete_post.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(PreviousPostActivity.this)
+                        .setTitle("警告")
+                        .setMessage("删除该帖子？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                LogUtils.d(TAG,"Dialog 确定 删除帖子");
+                                if(mPreviousPostPresenter != null){
+                                    mPreviousPostPresenter.deletePost(userId,postEntity.getId());
+                                }
+                                mPopWindow.dismiss();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                LogUtils.d(TAG,"Dialog 取消");
+                                mPopWindow.dismiss();
+                            }
+                        }).show();
+
+
+            }
+        });
+
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopWindow.dismiss();
+            }
+        });
+
+        //显示PopupWindow
+        View rootview = LayoutInflater.from(this).inflate(R.layout.activity_previous_post, null);
+        mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
     }
 
     @Override
@@ -219,6 +294,20 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
     @Override
     public void showLoadingFailure() {
         Snackbar.make(mRefreshLayout,"加载失败",2000).show();
+    }
+
+    @Override
+    public void showDeletePostSuccess() {
+        Snackbar.make(mRefreshLayout,"删除帖子成功!",1000).show();
+        if (deleteItemIndex != -1){
+            mPostAdapter.remove(deleteItemIndex);
+            deleteItemIndex = -1;
+        }
+    }
+
+    @Override
+    public void showDeletePostFailure(String reason) {
+        Snackbar.make(mRefreshLayout,reason,1000).show();
     }
 
     @Override

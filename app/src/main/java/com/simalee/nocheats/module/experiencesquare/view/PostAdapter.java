@@ -33,12 +33,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
 
     private Context mContext;
     private ArrayList<PostEntity> postEntityList;
-    private OnRecyclerItemClickListener recyclerItemClickListener;
+
+    private OnItemClickListener onItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
 
 
-    public void setRecyclerItemClickListener(OnRecyclerItemClickListener recyclerItemClickListener) {
-        this.recyclerItemClickListener = recyclerItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.mOnItemLongClickListener = onItemLongClickListener;
+    }
+
 
     public PostAdapter(Context context, ArrayList<PostEntity> postEntityList){
         mContext = context;
@@ -66,7 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
     }
 
 
-    public class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PostHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         CircleImageView image_user;
         TextView tv_userName;
@@ -80,6 +87,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             super(itemView);
             initViews(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         private void initViews(View view){
@@ -104,7 +112,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
                     });
 
             tv_userName.setText(postEntity.getUserName());
-            tv_userLevel.setText(IntegralUtils.getLevel(postEntity.getPoint()) + "");
+            tv_userLevel.setText("Lv "+ IntegralUtils.getLevel(postEntity.getPoint()) + "");
             tv_postType.setText(TypeUtils.getTypeString(postEntity.getPostType()));
             tv_postTitle.setText(postEntity.getPostTitle());
             tv_postContent.setText(postEntity.getPostContent());
@@ -114,18 +122,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         @Override
         public void onClick(View v) {
 
-            if (recyclerItemClickListener != null){
-                recyclerItemClickListener.onItemClick(getAdapterPosition(),postEntityList.get(getAdapterPosition()));
+            if (onItemClickListener != null){
+                onItemClickListener.onItemClick(getAdapterPosition(),postEntityList.get(getAdapterPosition()));
             }
 
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            if ( mOnItemLongClickListener != null){
+                mOnItemLongClickListener.onItemLongClick(getAdapterPosition()
+                        ,postEntityList.get(getAdapterPosition()));
+                return true;
+            }
+            return false;
+        }
     }
 
-    public interface OnRecyclerItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(int position,PostEntity postEntity);
     }
 
+    public interface OnItemLongClickListener{
+        void onItemLongClick(int position,PostEntity postEntity);
+    }
 
     /**
      * 将当前的数据替换为参数数据
@@ -155,5 +175,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
             throw new NullPointerException("Attend to get lastPostEntity in an empty postEntityList");
         }
         return postEntityList.get(postEntityList.size()-1);
+    }
+
+    /**
+     * 移除指定位置的数据
+     * @param index
+     */
+    public void remove(int index){
+        if (index < 0 || index > postEntityList.size()){
+            return;
+        }
+        notifyItemRemoved(index);
     }
 }

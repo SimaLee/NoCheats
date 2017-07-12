@@ -35,6 +35,11 @@ public interface ITopicModel {
         void onLoadTopicFailure();
     }
 
+    interface DeleteTopicCallback{
+        void onError(Exception e);
+        void onTopicDeletedSuccess();
+        void onTopicDeletedFailure(String reason);
+    }
 
     void loadTopics(String lastTimeStr,LoadTopicsCallback callback);
 
@@ -45,4 +50,5 @@ public interface ITopicModel {
 
     void loadMyTopics(String userId,String lastTimeStr,LoadMyTopicCallback callback);
 
+    void deleteTopic(String userId,String topicId,DeleteTopicCallback callback);
 }

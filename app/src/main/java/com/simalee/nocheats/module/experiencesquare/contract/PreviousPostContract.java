@@ -29,6 +29,9 @@ public interface PreviousPostContract {
         void hideLoadingMoreProgress();
 
         void showLoadingFailure();
+
+        void showDeletePostSuccess();
+        void showDeletePostFailure(String reason);
     }
 
     interface Presenter extends BasePresenter{
@@ -37,5 +40,7 @@ public interface PreviousPostContract {
         void loadMoreMyPosts(String userId,int postType,String lastTimeStr);
 
         void openPostDetails(PostEntity postEntity);
+
+        void deletePost(String userId,String postId);
     }
 }

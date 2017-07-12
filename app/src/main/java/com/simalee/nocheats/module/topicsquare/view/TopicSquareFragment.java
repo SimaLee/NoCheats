@@ -4,11 +4,8 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,12 +23,8 @@ import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseFragment;
 import com.simalee.nocheats.common.base.OnFabClickListener;
 import com.simalee.nocheats.common.util.LogUtils;
-import com.simalee.nocheats.common.util.PreferenceUtil;
-import com.simalee.nocheats.module.data.entity.post.PostEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicEntity;
 import com.simalee.nocheats.module.experiencesquare.view.DividerItemDecoration;
-import com.simalee.nocheats.module.experiencesquare.view.PostAdapter;
-import com.simalee.nocheats.module.experiencesquare.view.PostDetailActivity;
 import com.simalee.nocheats.module.topicsquare.contract.TopicsContract;
 import com.simalee.nocheats.module.topicsquare.presenter.TopicPresenter;
 
@@ -115,7 +108,7 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
 
         mTopicAdapter = new TopicAdapter(mContext,new ArrayList<TopicEntity>(0));
 
-        mTopicAdapter.setRecyclerItemClickListener(new TopicAdapter.OnRecyclerItemClickListener() {
+        mTopicAdapter.setOnItemClickListener(new TopicAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, TopicEntity topicEntity) {
                 if (mTopicPresenter != null){

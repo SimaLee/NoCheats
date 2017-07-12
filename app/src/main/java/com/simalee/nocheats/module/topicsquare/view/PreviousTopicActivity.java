@@ -1,13 +1,21 @@
 package com.simalee.nocheats.module.topicsquare.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,9 +27,10 @@ import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseActivity;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.common.util.PreferenceUtil;
+import com.simalee.nocheats.module.data.entity.post.PostEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicEntity;
 import com.simalee.nocheats.module.experiencesquare.view.DividerItemDecoration;
-import com.simalee.nocheats.module.experiencesquare.view.PostAdapter;
+import com.simalee.nocheats.module.experiencesquare.view.PreviousPostActivity;
 import com.simalee.nocheats.module.topicsquare.contract.PreviousTopicContract;
 import com.simalee.nocheats.module.topicsquare.presenter.PreviousTopicPresenter;
 
@@ -47,6 +56,12 @@ public class PreviousTopicActivity extends BaseActivity implements PreviousTopic
     private PreviousTopicContract.Presenter mPreviousTopicPresenter;
 
     String userId;
+
+
+    /**
+     * 删除的项的index
+     */
+    int deleteItemIndex = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,11 +95,19 @@ public class PreviousTopicActivity extends BaseActivity implements PreviousTopic
 
         mTopicAdapter = new TopicAdapter(this,new ArrayList<TopicEntity>(0));
 
-        mTopicAdapter.setRecyclerItemClickListener(new TopicAdapter.OnRecyclerItemClickListener() {
+        mTopicAdapter.setOnItemClickListener(new TopicAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, TopicEntity topicEntity) {
                 LogUtils.d(TAG,"onItemClick:" + topicEntity.toString());
                mPreviousTopicPresenter.openTopicDetails(topicEntity);
+            }
+        });
+
+        mTopicAdapter.setOnItemLongClickListener(new TopicAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position, TopicEntity topicEntity) {
+                deleteItemIndex = position;
+                showPopupWindow(topicEntity);
             }
         });
 
@@ -160,6 +183,79 @@ public class PreviousTopicActivity extends BaseActivity implements PreviousTopic
     }
 
 
+    /**
+     * 删除某一项
+     * @param topicEntity
+     */
+    private void showPopupWindow(final TopicEntity topicEntity) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.popupwindow_delete_topic, null);
+        final PopupWindow mPopWindow = new PopupWindow(contentView,
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true);
+        mPopWindow.setContentView(contentView);
+        //设置点击空白地方消失
+        mPopWindow.setFocusable(true);
+        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        //设置空白地方的背景色
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = 0.6f;
+        getWindow().setAttributes(lp);
+        //设置popupWindow消失的时候做的事情 即把背景色恢复
+        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+            }
+        });
+
+//        mPopWindow.setAnimationStyle(R.style.AnimationPreview);
+
+
+        Button bt_delete_topic = (Button) contentView.findViewById(R.id.bt_delete_topic);
+        Button bt_cancel = (Button) contentView.findViewById(R.id.bt_cancel);
+
+        bt_delete_topic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(PreviousTopicActivity.this)
+                        .setTitle("警告")
+                        .setMessage("删除该主题？")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                LogUtils.d(TAG,"Dialog 确定 删除帖子");
+                                if(mPreviousTopicPresenter != null){
+                                    mPreviousTopicPresenter.deleteTopic(userId,topicEntity.getId());
+                                }
+                                mPopWindow.dismiss();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                LogUtils.d(TAG,"Dialog 取消");
+                                mPopWindow.dismiss();
+                            }
+                        }).show();
+
+
+            }
+        });
+
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPopWindow.dismiss();
+            }
+        });
+
+        //显示PopupWindow
+        View rootview = LayoutInflater.from(this).inflate(R.layout.activity_previous_topic, null);
+        mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+    }
+
+
     @Override
     public void showTopics(List<TopicEntity> topicEntities) {
         mTopicAdapter.replaceData(topicEntities);
@@ -207,6 +303,20 @@ public class PreviousTopicActivity extends BaseActivity implements PreviousTopic
     @Override
     public void showLoadingFailure() {
         Snackbar.make(mRefreshLayout,"加载失败",2000).show();
+    }
+
+    @Override
+    public void showDeleteTopicSuccess() {
+        Snackbar.make(mRefreshLayout,"删除主题成功",1000).show();
+        if (deleteItemIndex != -1){
+            mTopicAdapter.remove(deleteItemIndex);
+            deleteItemIndex = -1;
+        }
+    }
+
+    @Override
+    public void showDeleteTopicFailure(String reason) {
+        Snackbar.make(mRefreshLayout,reason,1000).show();
     }
 
     @Override

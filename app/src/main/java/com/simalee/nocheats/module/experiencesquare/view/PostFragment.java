@@ -20,7 +20,6 @@ import com.lcodecore.tkrefreshlayout.footer.LoadingView;
 import com.lcodecore.tkrefreshlayout.header.progresslayout.ProgressLayout;
 import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.base.BaseFragment;
-import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.common.util.LogUtils;
 import com.simalee.nocheats.module.data.entity.post.PostEntity;
 import com.simalee.nocheats.module.experiencesquare.contract.PostsContract;
@@ -142,7 +141,7 @@ public class PostFragment extends BaseFragment implements PostsContract.AllPosts
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
 
-        mPostAdapter.setRecyclerItemClickListener(new PostAdapter.OnRecyclerItemClickListener() {
+        mPostAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position, PostEntity postEntity) {
                 mPresenter.openPostDetails(postEntity);

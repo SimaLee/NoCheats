@@ -38,6 +38,12 @@ public interface IPostModel {
         void onLoadPostDetailFailure();
     }
 
+    interface DeletePostCallback{
+        void onError(Exception e);
+        void onPostDeletedSuccess();
+        void onPostDeletedFailure(String reason);
+    }
+
 
     void releasePost(String userId,String postTitle,String postType,
                      String postContent,String postPicUrl,ReleasePostCallback callback);
@@ -48,4 +54,5 @@ public interface IPostModel {
 
     void loadPostDetail(String postId,String lastTimeStr,LoadPostDetailCallback callback);
 
+    void deletePost(String userId,String postId,DeletePostCallback callback);
 }

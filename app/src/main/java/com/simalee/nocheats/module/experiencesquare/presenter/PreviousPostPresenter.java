@@ -108,6 +108,37 @@ public class PreviousPostPresenter implements PreviousPostContract.Presenter {
         }
     }
 
+    /**
+     * 删除帖子
+     * @param userId
+     * @param postId
+     */
+    @Override
+    public void deletePost(String userId, String postId) {
+
+        mPostModel.deletePost(userId, postId, new IPostModel.DeletePostCallback() {
+            @Override
+            public void onError(Exception e) {
+                LogUtils.e(TAG,"error: "+ e.toString());
+                mPreviousPostView.showDeletePostFailure("删除帖子失败");
+            }
+
+            @Override
+            public void onPostDeletedSuccess() {
+                if(mPreviousPostView != null){
+                    mPreviousPostView.showDeletePostSuccess();
+                }
+            }
+
+            @Override
+            public void onPostDeletedFailure(String reason) {
+                if(mPreviousPostView != null){
+                    mPreviousPostView.showDeletePostFailure(reason);
+                }
+            }
+        });
+    }
+
     @Override
     public void start() {
         //do nothing

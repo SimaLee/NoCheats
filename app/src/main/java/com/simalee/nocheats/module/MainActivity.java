@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity
         rl_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this,"点击了用户头像",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"点击了用户头像",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, AccountManagementActivity.class);
                 drawer.closeDrawers();
                 startActivity(intent);

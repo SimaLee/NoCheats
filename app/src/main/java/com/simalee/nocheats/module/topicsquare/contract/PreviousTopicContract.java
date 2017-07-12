@@ -29,6 +29,9 @@ public interface PreviousTopicContract {
 
         void showLoadingFailure();
 
+        void showDeleteTopicSuccess();
+        void showDeleteTopicFailure(String reason);
+
     }
 
     interface Presenter extends BasePresenter{
@@ -37,6 +40,8 @@ public interface PreviousTopicContract {
         void loadMoreMyTopics(String userId,String lastTimeStr);
 
         void openTopicDetails(TopicEntity topicEntity);
+
+        void deleteTopic(String userId,String topicId);
     }
 
 }

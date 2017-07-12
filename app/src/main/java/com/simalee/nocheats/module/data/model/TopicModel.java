@@ -191,5 +191,46 @@ public class TopicModel implements ITopicModel {
 
     }
 
+    /**
+     * 删除主题 长按
+     * @param userId
+     * @param topicId
+     * @param callback
+     */
+    @Override
+    public void deleteTopic(String userId, String topicId, final DeleteTopicCallback callback) {
+        if (callback == null){
+            return;
+        }
+
+        OkHttpUtils.post()
+                .url(Constant.Url.URL_DELETE_TOPIC)
+                .addParams("u_id",userId)
+                .addParams("p_id",topicId)
+                .build()
+                .execute(new StringCallback() {
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onError(e);
+                    }
+
+                    @Override
+                    public void onResponse(String response, int id) {
+                        LogUtils.d(TAG,"onResponse: " + response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String msg = jsonObject.getString("msg");
+                            if ("0".equals(msg)){
+                                callback.onTopicDeletedSuccess();
+                            }else{
+                                callback.onTopicDeletedFailure("删除主题失败!");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
 
 }

@@ -15,7 +15,9 @@ import com.simalee.nocheats.R;
 import com.simalee.nocheats.common.config.Constant;
 import com.simalee.nocheats.common.util.IntegralUtils;
 import com.simalee.nocheats.common.util.LogUtils;
+import com.simalee.nocheats.module.data.entity.post.PostEntity;
 import com.simalee.nocheats.module.data.entity.topic.TopicEntity;
+import com.simalee.nocheats.module.experiencesquare.view.PostAdapter;
 
 import java.util.List;
 
@@ -30,10 +32,15 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
     private Context mContext;
     private List<TopicEntity> topicEntityList;
 
-    private OnRecyclerItemClickListener recyclerItemClickListener;
+    private  OnItemClickListener mOnItemClickListener;
+    private  OnItemLongClickListener mOnItemLongClickListener;
 
-    public void setRecyclerItemClickListener(OnRecyclerItemClickListener recyclerItemClickListener) {
-        this.recyclerItemClickListener = recyclerItemClickListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+        this.mOnItemLongClickListener = onItemLongClickListener;
     }
 
     public TopicAdapter(Context context,List<TopicEntity> topicEntities){
@@ -63,7 +70,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
     }
 
 
-    public class TopicHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class TopicHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         CircleImageView image_user;
         TextView tv_userName;
@@ -77,6 +84,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
             super(itemView);
             initViews(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         private void initViews(View view){
@@ -101,7 +109,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
                     });
 
             tv_userName.setText(data.getUserName());
-            tv_userLevel.setText(IntegralUtils.getLevel(data.getPoint()) + "");
+            tv_userLevel.setText("Lv "+ IntegralUtils.getLevel(data.getPoint()) + "");
             tv_topicType.setText(data.getTopicType());
             tv_topicTitle.setText(data.getTopicTitle());
             tv_topicContent.setText(data.getTopicContent());
@@ -112,15 +120,28 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
 
         @Override
         public void onClick(View v) {
-            if (recyclerItemClickListener != null){
-                recyclerItemClickListener.onItemClick(getAdapterPosition(),
+            if (mOnItemClickListener != null){
+                mOnItemClickListener.onItemClick(getAdapterPosition(),
                         topicEntityList.get(getAdapterPosition()));
             }
         }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (mOnItemLongClickListener != null){
+                mOnItemLongClickListener.onItemLongClick(getAdapterPosition(),
+                        topicEntityList.get(getAdapterPosition()));
+            }
+            return false;
+        }
     }
 
-    public interface OnRecyclerItemClickListener{
+    public interface OnItemClickListener{
         void onItemClick(int position,TopicEntity topicEntity);
+    }
+
+    public interface OnItemLongClickListener{
+        void onItemLongClick(int position,TopicEntity topicEntity);
     }
 
     /**
@@ -151,5 +172,16 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
             throw new NullPointerException("Attend to get lastEntity in an empty topicEntityList");
         }
         return topicEntityList.get(topicEntityList.size()-1);
+    }
+
+    /**
+     * 移除指定位置的数据
+     * @param index
+     */
+    public void remove(int index){
+        if (index < 0 || index > topicEntityList.size()){
+            return;
+        }
+        notifyItemRemoved(index);
     }
 }
