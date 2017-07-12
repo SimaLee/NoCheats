@@ -59,7 +59,8 @@
             android:text="3"
             android:textSize="10sp"
             android:gravity="center"
-            android:textColor="@color/colorGreen"/>
+            android:textColor="@color/colorGreen"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_operation_type"
@@ -92,6 +93,8 @@
         android:layout_marginLeft="40dp"
         android:textSize="14sp"
         android:gravity="start"
+        android:lineSpacingExtra="2dp"
+        android:lineSpacingMultiplier="1.1"
         android:text="这是回复的内容啊"/>
 
 

@@ -99,7 +99,9 @@
         android:layout_marginLeft="6dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        android:lineSpacingExtra="2dp"
+        android:lineSpacingMultiplier="1.1"
         android:gravity="start"
         android:text="这是帖子的内容啊"/>
 

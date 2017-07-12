@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity
 
         if (id == R.id.nav_homepage) {
             // Handle the camera action
-            Toast.makeText(MainActivity.this,"主页按钮",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(MainActivity.this,"主页按钮",Toast.LENGTH_SHORT).show();
             ExperienceSquareFragment fragment = ExperienceSquareFragment.newInstance();
 
             currentFragment = fragment;
@@ -249,7 +249,7 @@ public class MainActivity extends BaseActivity
 
         } else if (id == R.id.nav_topic_square) {
 
-            Toast.makeText(MainActivity.this,"点击了话题广场",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(MainActivity.this,"点击了话题广场",Toast.LENGTH_SHORT).show();
             TopicSquareFragment fragment = TopicSquareFragment.newInstance();
 
             currentFragment = fragment;
@@ -260,13 +260,13 @@ public class MainActivity extends BaseActivity
 
         } else if (id == R.id.nav_your_post) {
 
-            Toast.makeText(MainActivity.this,"点击了你的帖子",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(MainActivity.this,"点击了你的帖子",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this,PreviousPostActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_your_topic) {
 
-            Toast.makeText(MainActivity.this,"点击了你的主题",Toast.LENGTH_SHORT).show();
+           // Toast.makeText(MainActivity.this,"点击了你的主题",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this,PreviousTopicActivity.class);
             startActivity(intent);
 

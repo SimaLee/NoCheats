@@ -22,7 +22,7 @@
         android:id="@+id/tv_no_topics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="当前还没有帖子呢！\n\n去分享你的经历"
+        android:text="当前还没有话题呢！\n\n去发起你的话题吧"
         android:textSize="18sp"
         android:gravity="center"
         android:layout_centerInParent="true"/>

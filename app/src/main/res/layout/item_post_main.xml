@@ -99,8 +99,10 @@
         android:layout_marginLeft="6dp"
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:gravity="start"
+        android:lineSpacingExtra="2dp"
+        android:lineSpacingMultiplier="1.1"
         android:text="这是帖子的内容啊"/>
 
     <ImageView

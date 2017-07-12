@@ -9,12 +9,12 @@
 
     <ImageView
         android:id="@+id/image_logo"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:scaleType="center"
-        android:src="@drawable/ic_android_black_36dp"/>
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_app_logo"/>
 
 
     <android.support.design.widget.TextInputLayout
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="输入你的昵称吧"
-            android:textColor="@android:color/black"
+            android:textColor="@color/colorBdiduText"
             android:inputType="text"
             android:textSize="20sp"
             android:maxLength="15"

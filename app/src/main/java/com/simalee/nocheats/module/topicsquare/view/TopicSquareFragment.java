@@ -28,6 +28,10 @@ import com.simalee.nocheats.module.experiencesquare.view.DividerItemDecoration;
 import com.simalee.nocheats.module.topicsquare.contract.TopicsContract;
 import com.simalee.nocheats.module.topicsquare.presenter.TopicPresenter;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +63,7 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        EventBus.getDefault().register(this);
         mTopicPresenter = new TopicPresenter(this);
 
     }
@@ -97,6 +101,20 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
     public void onDetach() {
         super.onDetach();
         mContext = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTopicReleasedSuccess(TopicReleaseEvent event){
+        LogUtils.d(TAG,"receive event: ");
+        if (mTopicPresenter != null ){
+            mTopicPresenter.loadTopics();
+        }
     }
 
     private void setupRecyclerView(){
@@ -205,6 +223,9 @@ public class TopicSquareFragment extends BaseFragment implements TopicsContract.
 
     @Override
     public void showTopics(List<TopicEntity> topicEntityList) {
+        if(tv_no_topics.getVisibility() == View.VISIBLE){
+            tv_no_topics.setVisibility(View.GONE);
+        }
         mTopicAdapter.replaceData(topicEntityList);
     }
 

@@ -8,7 +8,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -29,7 +29,7 @@
 
         <activity android:name=".module.account.view.LoginActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,11 +40,11 @@
         </activity>
 
         <activity android:name=".module.account.view.RegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus"/>
         <activity android:name=".module.account.view.RegisterStep2Activity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus"/>
         <activity android:name=".module.account.view.RegisterStep3Activity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar_No_WindowTranslucentStatus"/>
         <!-- account module end -->
 
 

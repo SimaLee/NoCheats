@@ -33,6 +33,7 @@ import com.simalee.nocheats.module.topicsquare.presenter.TopicPresenter;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -296,6 +297,9 @@ public class NewTopicActivity extends BaseActivity implements TopicsContract.New
 
     @Override
     public void showPostReleasedSuccess() {
+
+        EventBus.getDefault().post(new TopicReleaseEvent());
+
         Snackbar snackbar =  Snackbar.make(tv_release_topic,"话题发布成功，获得 3 点积分",2000).setAction("确定", new View.OnClickListener() {
             @Override
             public void onClick(View v) {

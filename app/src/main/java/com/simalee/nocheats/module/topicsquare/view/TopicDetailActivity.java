@@ -260,6 +260,7 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
         //封装第一个entity 特殊
         List<ICommentEntity> convertData = convertEntittList(topicCommentEntityList);
         mTopicDetailAdapter.replaceData(convertData);
+        //mRecyclerView.smoothScrollToPosition(mTopicDetailAdapter.getItemCount());
     }
 
     @Override
@@ -281,6 +282,9 @@ public class TopicDetailActivity extends BaseActivity implements TopicDetailCont
     public void showCommentSuccess() {
         et_comment.setText("");
         shortToast("发表评论成功!");
+        if (mTopicDetailPresenter != null){
+            mTopicDetailPresenter.loadTopicDetail(topicId,topicTime);
+        }
     }
 
     @Override

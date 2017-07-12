@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -179,6 +180,9 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         TextView tv_operation_type;
 
+        RelativeLayout rl_user;
+        RelativeLayout rl_comment_reply;
+
         public CommentViewHolder(View itemView) {
             super(itemView);
             initViews(itemView);
@@ -197,6 +201,9 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_moreReply = (TextView) rootView.findViewById(R.id.tv_more_replies);
 
             tv_operation_type = (TextView) rootView.findViewById(R.id.tv_operation_type);
+
+            rl_user = (RelativeLayout) rootView.findViewById(R.id.rl_user);
+            rl_comment_reply = (RelativeLayout) rootView.findViewById(R.id.rl_comment_reply);
         }
 
         public void bindData(final TopicDetailFloorEntity data) {
@@ -224,13 +231,30 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             setCommentReply(data.getCommentId(),data.getRepliesList());
 
+            //为了用户交互做的调整
+            rl_user.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnCommentClickListener != null){
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
+                    }
+                }
+            });
+
+            tv_topicComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnCommentClickListener != null){
+                        mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
+                    }
+                }
+            });
+
             tv_operation_type.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //data.getCommentId()
-                    LogUtils.d(TAG,"点击了："+data.toString());
                     if(mOnCommentClickListener != null){
-                        //TODO :这里错了 ID
                         mOnCommentClickListener.onCommentClick(v,data.getCommentUserName(),data.getCommentId());
                     }
                 }
@@ -272,13 +296,23 @@ public class TopicDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 tv_moreReply.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(mContext, "查看更多回复", Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(mContext, "查看更多回复", Toast.LENGTH_SHORT).show();
                         if (mOnMoreReplyClickListener != null){
                             mOnMoreReplyClickListener.onMoreReplyClick(floorId);
                         }
                     }
                 });
             }
+
+            rl_comment_reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mOnMoreReplyClickListener != null){
+                        mOnMoreReplyClickListener.onMoreReplyClick(floorId);
+                    }
+                }
+            });
+
         }
 
         /**

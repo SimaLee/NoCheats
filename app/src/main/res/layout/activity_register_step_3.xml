@@ -5,6 +5,16 @@
     android:paddingLeft="20dp"
     android:paddingRight="20dp">
 
+
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_app_logo"/>
+
     <TextView
         android:id="@+id/tv_congratulation"
         android:layout_width="wrap_content"

@@ -79,6 +79,10 @@ public class PostsPresenter implements PostsContract.Presenter {
                 @Override
                 public void onError(Exception e) {
                     LogUtils.e(TAG,"error:"+ e.toString());
+                    if (mPostView.isActive()){
+                        mPostView.hideLoadingProgress();
+                        mPostView.showLoadingFailure();
+                    }
                 }
 
                 @Override
@@ -115,6 +119,10 @@ public class PostsPresenter implements PostsContract.Presenter {
                 @Override
                 public void onError(Exception e) {
                     LogUtils.e(TAG,"error:"+ e.toString());
+                    if (mPostView.isActive()){
+                        mPostView.hideLoadingMoreProgress();
+                        mPostView.showLoadingFailure();
+                    }
                 }
 
                 @Override

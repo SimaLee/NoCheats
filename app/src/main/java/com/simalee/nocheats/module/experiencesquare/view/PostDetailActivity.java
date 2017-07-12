@@ -287,6 +287,7 @@ public class PostDetailActivity extends BaseActivity implements PostDetailContra
         List<ICommentEntity> convertData = convertEntittList(postCommentEntityList);
 
         mPostDetailAdapter.replaceData(convertData);
+        //mRecyclerView.smoothScrollToPosition(mPostDetailAdapter.getItemCount());
     }
 
     @Override

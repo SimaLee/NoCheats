@@ -98,6 +98,10 @@ public class UserModel implements IUserModel{
                     @Override
                     public void onError(Call call, Exception e, int id) {
                         LogUtils.e(TAG,e.toString());
+                        Response failureReason = new Response();
+                        failureReason.setType(Response.TYPE_SYSTEM_ERROR);
+                        failureReason.setError("系统正在维护升级，暂停服务");
+                        callback.onRegisterFailed(failureReason);
                     }
 
                     @Override

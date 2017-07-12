@@ -50,6 +50,7 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
             public void onError(Exception e) {
                 LogUtils.e(TAG,"error: "+e.toString());
                 if (mTopicDetailView != null){
+                    mTopicDetailView.hideLoadingProgress();
                     mTopicDetailView.showLoadTopicDetailFailure();
                 }
             }
@@ -131,6 +132,9 @@ public class TopicDetailPresenter implements TopicDetailContract.Presenter {
             @Override
             public void onError(Exception e) {
                 LogUtils.e(TAG,"error: " + e.toString());
+                if (mTopicDetailView != null){
+                    mTopicDetailView.showCommentFailure();
+                }
             }
 
             @Override
