@@ -299,8 +299,10 @@ public class PreviousPostActivity extends BaseActivity implements PreviousPostCo
     @Override
     public void showDeletePostSuccess() {
         Snackbar.make(mRefreshLayout,"删除帖子成功!",1000).show();
+        LogUtils.d(TAG,"before: " + mPostAdapter.getItemCount());
         if (deleteItemIndex != -1){
             mPostAdapter.remove(deleteItemIndex);
+            LogUtils.d(TAG,"after: " + mPostAdapter.getItemCount());
             deleteItemIndex = -1;
         }
     }

@@ -182,6 +182,7 @@ public class TopicAdapter extends RecyclerView.Adapter<TopicAdapter.TopicHolder>
         if (index < 0 || index > topicEntityList.size()){
             return;
         }
+        topicEntityList.remove(index);
         notifyItemRemoved(index);
     }
 }

@@ -185,6 +185,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostHolder> {
         if (index < 0 || index > postEntityList.size()){
             return;
         }
+        postEntityList.remove(index);
         notifyItemRemoved(index);
     }
 }
