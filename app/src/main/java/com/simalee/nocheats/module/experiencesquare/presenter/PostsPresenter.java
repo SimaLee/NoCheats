@@ -122,6 +122,7 @@ public class PostsPresenter implements PostsContract.Presenter {
                     if (mPostView.isActive()){
                         mPostView.hideLoadingMoreProgress();
                         mPostView.showLoadingFailure();
+
                     }
                 }
 
